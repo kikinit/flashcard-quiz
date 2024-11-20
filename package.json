@@ -1,0 +1,31 @@
+{
+  "name": "flashcard-quiz",
+  "version": "0.1.0",
+  "description": "A Flashcard Quiz",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kikinit/flashcard-quiz"
+  },
+  "author": "Mattias Ubbesen <mu222cu@student.lnu.se>",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "@typescript-eslint/eslint-plugin": "^8.9.0",
+    "@typescript-eslint/parser": "^8.9.0",
+    "eslint": "^9.12.0",
+    "eslint-plugin-jest": "^28.8.3",
+    "globals": "^15.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
