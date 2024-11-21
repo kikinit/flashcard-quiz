@@ -46,4 +46,12 @@ describe('QuestionBank', () => {
     // Verify question1 and question3 are still present.
     expect([question1, question3]).toContain(randomQuestion)
   })
+
+  it('should throw an error if a duplicate question is added', () => {
+    expect(() => {
+      questionBank.addQuestion(question1)
+      questionBank.addQuestion(question1) // Add duplicate.
+    }).toThrow('The question is already in the QuestionBank.')
+  })
+  
 })
