@@ -3,16 +3,16 @@ import { Question } from './Question'
 export class QuestionBank {
   private questions: Question[] = []
 
-  addQuestion(question: Question): void {
+  public addQuestion(question: Question): void {
     this.questions.push(question)
   }
 
-  getRandomQuestion(): Question {
+  public getRandomQuestion(): Question {
     const randomIndex = Math.floor(Math.random() * this.questions.length)
     return this.questions[randomIndex]
   }
 
-  removeQuestion(question: Question): void {
+  public removeQuestion(question: Question): void {
     this.questions = this.questions.filter(q => q !== question)
   }
 }
