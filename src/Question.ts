@@ -5,22 +5,22 @@ export class Question {
     private answer: string
   ) {}
 
-  getText(): string {
+  public getText(): string {
     return this.text
   }
 
-  getOptions(): string[] {
+  public getOptions(): string[] {
     return this.options
   }
 
-  getAnswer(): string {
-    return this.answer
-  }
-
-  checkAnswer(input: string): boolean {
+  public checkAnswer(input: string): boolean {
     if (!this.options.includes(input)) {
       throw new Error('Invalid answer: Answer must be one of the available options.')
     }
-    return input === this.answer
+    return input === this.getAnswer()
+  }
+
+  private getAnswer(): string {
+    return this.answer
   }
 }

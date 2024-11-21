@@ -6,7 +6,6 @@ describe('Question', () => {
 
     expect(question.getText()).toBe('What is 2 + 2?')
     expect(question.getOptions()).toEqual(['3', '4', '5'])
-    expect(question.getAnswer()).toBe('4')
   })
 
   it('should validate a correct answer', () => {
