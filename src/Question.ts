@@ -20,6 +20,10 @@ export class Question {
     return input === this.getAnswer()
   }
 
+  public getHint(): string {
+    return this.answer.charAt(0)
+  }
+
   private getAnswer(): string {
     return this.answer
   }
