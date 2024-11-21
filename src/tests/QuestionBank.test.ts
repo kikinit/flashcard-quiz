@@ -54,4 +54,17 @@ describe('QuestionBank', () => {
     }).toThrow('The question is already in the QuestionBank.')
   })
   
+  it('should throw an error if attempting to remove a question that does not exist', () => {
+    const nonExistentQuestion = new Question(
+      'What is Node.js primarily used for?',
+      ['Frontend', 'Backend', 'Mobile apps'],
+      'Backend'
+    )
+  
+    expect(() => {
+      questionBank.removeQuestion(nonExistentQuestion)
+    }).toThrow('The question is not in the QuestionBank.')
+  })
+  
+
 })
