@@ -28,14 +28,20 @@ describe('Question', () => {
     )
   })
 
-  it('should return the first letter of the correct answer as a hint', () => {
+  it('should return a random letter from the correct answer as a hint', () => {
+    const correctAnswer = 'Paris'
     const question = new Question(
       'What is the capital of France?',
-      ['Berlin', 'Stockholm', 'Paris'],
-      'Paris'
+      ['Berlin', 'Stockholm', correctAnswer],
+      correctAnswer
     )
   
-    expect(question.getHint()).toBe('P')
+    const hint = question.getHint()
+  
+    // Check that the hint is a valid character from the correct answer.
+    expect(correctAnswer.includes(hint)).toBe(true)
   })
+  
+  
   
 })
