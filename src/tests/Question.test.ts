@@ -1,7 +1,7 @@
 import { Question } from '../Question'
 
 describe('Question', () => {
-  it('should create a question with text, options, and the correct answer', () => {
+  it('should create a question with text, options, and a correct answer', () => {
     const question = new Question('What is 2 + 2?', ['3', '4', '5'], '4')
 
     expect(question.getText()).toBe('What is 2 + 2?')
@@ -35,13 +35,8 @@ describe('Question', () => {
       ['Berlin', 'Stockholm', correctAnswer],
       correctAnswer
     )
-  
     const hint = question.getHint()
   
-    // Check that the hint is a valid character from the correct answer.
     expect(correctAnswer.includes(hint)).toBe(true)
   })
-  
-  
-  
 })
