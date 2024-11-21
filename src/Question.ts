@@ -21,7 +21,8 @@ export class Question {
   }
 
   public getHint(): string {
-    return this.answer.charAt(0)
+    const randomIndex = Math.floor(Math.random() * this.answer.length)
+    return this.answer[randomIndex]
   }
 
   private getAnswer(): string {
