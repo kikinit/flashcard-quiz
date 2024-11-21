@@ -35,4 +35,15 @@ describe('QuestionBank', () => {
     const randomQuestion = questionBank.getRandomQuestion()
     expect([question1, question2, question3]).toContain(randomQuestion)
   })
+
+  it('should remove a question from the QuestionBank', () => {
+    questionBank.removeQuestion(question2)
+
+    // Verify question2 is removed.
+    const randomQuestion = questionBank.getRandomQuestion()
+    expect(randomQuestion).not.toBe(question2)
+
+    // Verify question1 and question3 are still present.
+    expect([question1, question3]).toContain(randomQuestion)
+  })
 })
