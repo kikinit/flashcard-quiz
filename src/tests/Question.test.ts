@@ -27,5 +27,15 @@ describe('Question', () => {
       'Invalid answer: Answer must be one of the available options.'
     )
   })
+
+  it('should return the first letter of the correct answer as a hint', () => {
+    const question = new Question(
+      'What is the capital of France?',
+      ['Berlin', 'Stockholm', 'Paris'],
+      'Paris'
+    )
+  
+    expect(question.getHint()).toBe('P')
+  })
   
 })
