@@ -8,8 +8,8 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "test": "jest --verbose",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
