@@ -17,6 +17,9 @@ export class QuestionBank {
   }
 
   public removeQuestion(question: Question): void {
+    if (!this.questions.includes(question)) {
+      throw new Error('The question is not in the QuestionBank.')
+    }
     this.questions = this.questions.filter(q => q !== question)
   }
 }
