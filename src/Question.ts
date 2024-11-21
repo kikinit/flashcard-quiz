@@ -18,6 +18,9 @@ export class Question {
   }
 
   checkAnswer(input: string): boolean {
+    if (!this.options.includes(input)) {
+      throw new Error('Invalid answer: Answer must be one of the available options.')
+    }
     return input === this.answer
   }
 }
