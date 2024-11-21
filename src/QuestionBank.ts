@@ -11,4 +11,8 @@ export class QuestionBank {
     const randomIndex = Math.floor(Math.random() * this.questions.length)
     return this.questions[randomIndex]
   }
+
+  removeQuestion(question: Question): void {
+    this.questions = this.questions.filter(q => q !== question)
+  }
 }
