@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true, // Auto-format on save
+    "files.exclude": {
+        "dist/": true, // Hide compiled files in VS Code
+        "node_modules/": true // Hide node_modules folder
+    },
+    "typescript.tsdk": "node_modules/typescript/lib", // Use workspace TypeScript version
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
+    "prettier.requireConfig": true // Ensure Prettier only runs when config exists
+}
