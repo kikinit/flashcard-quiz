@@ -99,4 +99,26 @@ describe('QuizGame', () => {
     expect(() => sut.getNextQuestion()).toThrow(GameOverError)
   })
 
+  it('should reset the game state, score, and attempted questions on restart', () => {
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    questionBank.addQuestion(question1)
+  
+    // Simulate game progression.
+    sut.getNextQuestion()
+    sut.checkAnswer(questionA.correctAnswer)
+  
+    // Verify the game is over.
+    expect(sut.isGameOver()).toBe(true)
+  
+    // Restart the game.
+    sut.restart()
+  
+    // Verify game state and score reset.
+    expect(sut.isGameOver()).toBe(false)
+    expect(sut.getScore()).toBe(0)
+  
+    // Verify all questions are available again.
+    expect(() => sut.getNextQuestion()).not.toThrow()
+  })
+  
 })
