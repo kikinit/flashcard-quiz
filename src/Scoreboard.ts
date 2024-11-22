@@ -5,4 +5,7 @@ export class Scoreboard {
     return this.score
   }
 
+  public increaseScore(amount: number): void {
+    this.score += amount
+  }
 }
