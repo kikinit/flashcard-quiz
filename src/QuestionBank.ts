@@ -1,11 +1,12 @@
 import { Question } from './Question'
+import { DuplicateQuestionError, QuestionNotFoundError } from './errors'
 
 export class QuestionBank {
   private questions: Question[] = []
 
   public addQuestion(question: Question): void {
     if (this.questions.includes(question)) {
-      throw new Error('The question is already in the QuestionBank.')
+      throw new DuplicateQuestionError()
     }
     this.questions.push(question)
   }
@@ -18,7 +19,7 @@ export class QuestionBank {
 
   public removeQuestion(question: Question): void {
     if (!this.questions.includes(question)) {
-      throw new Error('The question is not in the QuestionBank.')
+      throw new QuestionNotFoundError()
     }
     this.questions = this.questions.filter(q => q !== question)
   }

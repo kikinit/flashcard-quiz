@@ -1,4 +1,5 @@
 import { Question } from '../Question'
+import { InvalidAnswerError } from '../errors/InvalidAnswerError'
 
 describe('Question', () => {
   it('should create a question with text, options, and a correct answer', () => {
@@ -23,7 +24,7 @@ describe('Question', () => {
   it('should throw an error if the provided answer is not in the options', () => {
     const question = new Question('What is 2 + 2?', ['3', '4', '5'], '4')
   
-    expect(() => question.checkAnswer('7')).toThrow(Error)
+    expect(() => question.checkAnswer('7')).toThrow(InvalidAnswerError)
   })
 
   it('should return a random letter from the correct answer as a hint', () => {

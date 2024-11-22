@@ -1,5 +1,6 @@
 import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
+import { NoCurrentQuestionError } from './errors/NoCurrentQuestionError'
 
 export class QuizGame {
   private questionBank: QuestionBank
@@ -16,7 +17,7 @@ export class QuizGame {
 
   public checkAnswer(answer: string): boolean {
     if (!this.currentQuestion) {
-      throw new Error('No current question to check an answer against.')
+      throw new NoCurrentQuestionError()
     }
     return this.currentQuestion.checkAnswer(answer)
   }

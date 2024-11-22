@@ -1,6 +1,7 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
+import { NoCurrentQuestionError } from '../errors/NoCurrentQuestionError'
 
 describe('QuizGame', () => {
   let question1: Question
@@ -59,7 +60,7 @@ describe('QuizGame', () => {
   it('should throw an error if checkAnswer is called without a current question', () => {
     expect(() => {
       quizGame.checkAnswer('Some answer')
-    }).toThrow(Error)
+    }).toThrow(NoCurrentQuestionError)
   })
   
 })

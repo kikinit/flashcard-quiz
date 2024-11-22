@@ -1,5 +1,6 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
+import { DuplicateQuestionError, QuestionNotFoundError } from '../errors'
 
 describe('QuestionBank', () => {
   let question1: Question
@@ -51,7 +52,7 @@ describe('QuestionBank', () => {
     expect(() => {
       questionBank.addQuestion(question1)
       questionBank.addQuestion(question1) // Add duplicate.
-    }).toThrow(Error)
+    }).toThrow(DuplicateQuestionError)
   })
   
   it('should throw an error if attempting to remove a question that does not exist', () => {
@@ -63,7 +64,7 @@ describe('QuestionBank', () => {
   
     expect(() => {
       questionBank.removeQuestion(nonExistentQuestion)
-    }).toThrow(Error)
+    }).toThrow(QuestionNotFoundError)
   })
   
 

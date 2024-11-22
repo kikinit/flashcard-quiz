@@ -1,3 +1,5 @@
+import { InvalidAnswerError } from './errors/InvalidAnswerError'
+
 export class Question {
   constructor(
     private text: string,
@@ -15,7 +17,7 @@ export class Question {
 
   public checkAnswer(input: string): boolean {
     if (!this.options.includes(input)) {
-      throw new Error('Invalid answer: Answer must be one of the available options.')
+      throw new InvalidAnswerError(input, this.options)
     }
     return input === this.getAnswer()
   }
