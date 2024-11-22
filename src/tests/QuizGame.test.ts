@@ -22,32 +22,33 @@ describe('QuizGame', () => {
   }
 
   beforeEach(() => {
-    // Create questions using the grouped data.
-    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
-    const question2 = new Question(questionB.text, questionB.options, questionB.correctAnswer)
-
-    // Initialize QuestionBank and add questions.
+    // Initialize QuestionBank and QuizGame.
     questionBank = new QuestionBank()
-    questionBank.addQuestion(question1)
-    questionBank.addQuestion(question2)
-
-    // Initialize the QuizGame system under test.
     sut = new QuizGame(questionBank)
   })
 
+  // Helper for mocking getNextQuestion.
+  const setupMockedCurrentQuestion = (question: Question) => {
+    jest.spyOn(sut, 'getNextQuestion').mockImplementation(() => {
+      sut['currentQuestion'] = question
+      return question
+    })
+  }
+
   it('should fetch a random question from the QuestionBank', () => {
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question2 = new Question(questionB.text, questionB.options, questionB.correctAnswer)
+
+    questionBank.addQuestion(question1)
+    questionBank.addQuestion(question2)
+
     const question = sut.getNextQuestion()
-    expect([
-      new Question(questionA.text, questionA.options, questionA.correctAnswer),
-      new Question(questionB.text, questionB.options, questionB.correctAnswer),
-    ]).toContainEqual(question)
+    expect([question1, question2]).toContainEqual(question)
   })
 
   it('should validate a submitted answer for the current question', () => {
-    jest.spyOn(sut, 'getNextQuestion').mockImplementation(() => {
-      sut['currentQuestion'] = new Question(questionA.text, questionA.options, questionA.correctAnswer)
-      return sut['currentQuestion']
-    })
+    const mockedQuestion = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    setupMockedCurrentQuestion(mockedQuestion)
 
     sut.getNextQuestion()
 
