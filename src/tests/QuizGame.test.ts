@@ -1,7 +1,7 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
-import { NoCurrentQuestionError } from '../errors'
+import { NoCurrentQuestionError, GameOverError } from '../errors'
 
 describe('QuizGame', () => {
   let questionBank: QuestionBank
@@ -90,5 +90,13 @@ describe('QuizGame', () => {
     expect(sut.isGameOver()).toBe(true)
   })
  
+  it('should prevent fetching a question after the game is over', () => {
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    questionBank.addQuestion(question1)
+
+    sut.getNextQuestion()
+
+    expect(() => sut.getNextQuestion()).toThrow(GameOverError)
+  })
 
 })
