@@ -1,7 +1,7 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
-import { NoCurrentQuestionError } from '../errors'
+import { NoCurrentQuestionError, NoMoreQuestionsError } from '../errors'
 
 describe('QuizGame', () => {
   let questionBank: QuestionBank
@@ -80,4 +80,18 @@ describe('QuizGame', () => {
     sut.checkAnswer(questionA.wrongAnswer)
     expect(sut.getScore()).toBe(1)
   })
+
+  it('should end the game when all questions are attempted', () => {
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question2 = new Question(questionB.text, questionB.options, questionB.correctAnswer)
+    questionBank.addQuestion(question1)
+    questionBank.addQuestion(question2)
+  
+    sut.getNextQuestion()
+    sut.getNextQuestion()
+    
+    // Attempting to fetch another question should indicate the game is over.
+    expect(() => sut.getNextQuestion()).toThrow(NoMoreQuestionsError)
+  })
+  
 })
