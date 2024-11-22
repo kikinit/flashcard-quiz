@@ -63,4 +63,21 @@ describe('QuizGame', () => {
       sut.checkAnswer('Some answer')
     }).toThrow(NoCurrentQuestionError)
   })
+
+  it('should track the player score based on correct and incorrect answers', () => {
+    const mockedQuestion = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    setupMockedCurrentQuestion(mockedQuestion)
+
+    // Ensure the score starts at 0.
+    expect(sut.getScore()).toBe(0)
+
+    // Simulate a correct answer.
+    sut.getNextQuestion()
+    sut.checkAnswer(questionA.correctAnswer)
+    expect(sut.getScore()).toBe(1)
+
+    // Simulate a wrong answer.
+    sut.checkAnswer(questionA.wrongAnswer)
+    expect(sut.getScore()).toBe(1)
+  })
 })
