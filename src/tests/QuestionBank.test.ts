@@ -48,14 +48,14 @@ describe('QuestionBank', () => {
     expect([question1, question3]).toContain(randomQuestion)
   })
 
-  it('should throw an error if a duplicate question is added', () => {
+  it('should throw a DuplicateQuestionError if a duplicate question is added', () => {
     expect(() => {
       questionBank.addQuestion(question1)
       questionBank.addQuestion(question1) // Add duplicate.
     }).toThrow(DuplicateQuestionError)
   })
   
-  it('should throw an error if attempting to remove a question that does not exist', () => {
+  it('should throw a QuestionNotFoundError if attempting to remove a question that does not exist', () => {
     const nonExistentQuestion = new Question(
       'What is Node.js primarily used for?',
       ['Frontend', 'Backend', 'Mobile apps'],

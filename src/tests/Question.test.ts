@@ -21,7 +21,7 @@ describe('Question', () => {
     expect(question.checkAnswer('3')).toBe(false)
   })
 
-  it('should throw an error if the provided answer is not in the options', () => {
+  it('should throw an InvalidAnswerError if the provided answer is not in the options', () => {
     const question = new Question('What is 2 + 2?', ['3', '4', '5'], '4')
   
     expect(() => question.checkAnswer('7')).toThrow(InvalidAnswerError)
