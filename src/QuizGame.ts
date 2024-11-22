@@ -5,6 +5,7 @@ import { NoCurrentQuestionError } from './errors/NoCurrentQuestionError'
 export class QuizGame {
   private questionBank: QuestionBank
   private currentQuestion: Question | null = null
+  private score: number = 0
 
   constructor(questionBank: QuestionBank) {
     this.questionBank = questionBank
@@ -19,6 +20,14 @@ export class QuizGame {
     if (!this.currentQuestion) {
       throw new NoCurrentQuestionError()
     }
-    return this.currentQuestion.checkAnswer(answer)
+    const isCorrect = this.currentQuestion.checkAnswer(answer)
+    if (isCorrect) {
+      this.score++
+    }
+    return isCorrect
+  }
+
+  public getScore(): number {
+    return this.score
   }
 }
