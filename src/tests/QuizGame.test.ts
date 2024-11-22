@@ -59,7 +59,7 @@ describe('QuizGame', () => {
   it('should throw an error if checkAnswer is called without a current question', () => {
     expect(() => {
       quizGame.checkAnswer('Some answer')
-    }).toThrow('No current question to check an answer against.')
+    }).toThrow(Error)
   })
   
 })

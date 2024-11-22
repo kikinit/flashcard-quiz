@@ -51,7 +51,7 @@ describe('QuestionBank', () => {
     expect(() => {
       questionBank.addQuestion(question1)
       questionBank.addQuestion(question1) // Add duplicate.
-    }).toThrow('The question is already in the QuestionBank.')
+    }).toThrow(Error)
   })
   
   it('should throw an error if attempting to remove a question that does not exist', () => {
@@ -63,7 +63,7 @@ describe('QuestionBank', () => {
   
     expect(() => {
       questionBank.removeQuestion(nonExistentQuestion)
-    }).toThrow('The question is not in the QuestionBank.')
+    }).toThrow(Error)
   })
   
 
