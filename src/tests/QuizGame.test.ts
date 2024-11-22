@@ -74,11 +74,11 @@ describe('QuizGame', () => {
     // Simulate a correct answer.
     sut.getNextQuestion()
     sut.checkAnswer(questionA.correctAnswer)
-    expect(sut.getScore()).toBe(1)
+    expect(sut.getScore()).toBe(10)
 
     // Simulate a wrong answer.
     sut.checkAnswer(questionA.wrongAnswer)
-    expect(sut.getScore()).toBe(1)
+    expect(sut.getScore()).toBe(10)
   })
 
   it('should transition to GAME_OVER state after fetching the last question', () => {
@@ -128,7 +128,7 @@ describe('QuizGame', () => {
     sut.getNextQuestion()
     sut.checkAnswer(questionA.correctAnswer)
   
-    expect(sut.getScore()).toBe(1)
+    expect(sut.getScore()).toBe(10)
     expect(sut.isGameOver()).toBe(true)
   })  
 })

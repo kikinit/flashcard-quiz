@@ -5,7 +5,7 @@ import { GameState } from './GameState'
 import { NoCurrentQuestionError, GameOverError } from './errors'
 
 export class QuizGame {
-  private readonly CORRECT_ANSWER_REWARD = 1
+  private readonly CORRECT_ANSWER_REWARD = 10
   private questionBank: QuestionBank
   private currentQuestion: Question | null = null
   private gameState: GameState = GameState.PLAYING
