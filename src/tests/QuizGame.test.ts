@@ -120,5 +120,15 @@ describe('QuizGame', () => {
     // Verify all questions are available again.
     expect(() => sut.getNextQuestion()).not.toThrow()
   })
+
+  it('should hold the final score at the end of the game', () => {
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    questionBank.addQuestion(question1)
   
+    sut.getNextQuestion()
+    sut.checkAnswer(questionA.correctAnswer)
+  
+    expect(sut.getScore()).toBe(10)
+    expect(sut.isGameOver()).toBe(true)
+  })  
 })
