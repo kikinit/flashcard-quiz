@@ -1,8 +1,9 @@
 import { Question } from './Question'
-import { DuplicateQuestionError, QuestionNotFoundError } from './errors'
+import { DuplicateQuestionError, QuestionNotFoundError, NoMoreQuestionsError } from './errors'
 
 export class QuestionBank {
   private questions: Question[] = []
+  private attemptedQuestions: Set<Question> = new Set()
 
   public addQuestion(question: Question): void {
     if (this.questions.includes(question)) {
@@ -10,12 +11,23 @@ export class QuestionBank {
     }
     this.questions.push(question)
   }
-  
 
   public getRandomQuestion(): Question {
-    const randomIndex = Math.floor(Math.random() * this.questions.length)
-    return this.questions[randomIndex]
+    const availableQuestions = this.questions.filter(
+      (question) => !this.attemptedQuestions.has(question)
+    )
+
+    if (availableQuestions.length === 0) {
+      throw new NoMoreQuestionsError()
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableQuestions.length)
+    const selectedQuestion = availableQuestions[randomIndex]
+
+    this.attemptedQuestions.add(selectedQuestion)
+    return selectedQuestion
   }
+ 
 
   public removeQuestion(question: Question): void {
     if (!this.questions.includes(question)) {

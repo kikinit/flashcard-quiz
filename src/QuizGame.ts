@@ -1,6 +1,6 @@
 import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
-import { NoCurrentQuestionError } from './errors/NoCurrentQuestionError'
+import { NoCurrentQuestionError} from './errors'
 
 export class QuizGame {
   private questionBank: QuestionBank
@@ -15,7 +15,7 @@ export class QuizGame {
     this.currentQuestion = this.questionBank.getRandomQuestion()
     return this.currentQuestion
   }
-
+ 
   public checkAnswer(answer: string): boolean {
     if (!this.currentQuestion) {
       throw new NoCurrentQuestionError()
