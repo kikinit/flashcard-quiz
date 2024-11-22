@@ -30,10 +30,8 @@ export class QuizGame {
   }
  
   public checkAnswer(answer: string): boolean {
-    if (!this.currentQuestion) {
-      throw new NoCurrentQuestionError()
-    }
-    const isCorrect = this.currentQuestion.checkAnswer(answer)
+    const currentQuestion = this.ensureCurrentQuestion()
+    const isCorrect = currentQuestion.checkAnswer(answer)
     if (isCorrect) {
       this.scoreboard.increaseScore(this.CORRECT_ANSWER_REWARD)
     }
@@ -53,5 +51,12 @@ export class QuizGame {
     this.scoreboard.resetScore()
     this.currentQuestion = null
     this.questionBank.resetAttemptedQuestions()
+  }
+
+  private ensureCurrentQuestion(): Question {
+    if (!this.currentQuestion) {
+      throw new NoCurrentQuestionError()
+    }
+    return this.currentQuestion
   }  
 }
