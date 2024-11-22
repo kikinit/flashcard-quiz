@@ -15,4 +15,10 @@ describe('Scoreboard', () => {
     scoreboard.increaseScore(10)
     expect(scoreboard.getScore()).toBe(10)
   })
+
+  it('should reset the score to 0', () => {
+    scoreboard.increaseScore(10)
+    scoreboard.resetScore()
+    expect(scoreboard.getScore()).toBe(0)
+  })
 })
