@@ -1,11 +1,13 @@
 import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
+import { GameState } from './GameState'
 import { NoCurrentQuestionError} from './errors'
 
 export class QuizGame {
   private questionBank: QuestionBank
   private currentQuestion: Question | null = null
   private score: number = 0
+  private gameState: GameState = GameState.PLAYING
 
   constructor(questionBank: QuestionBank) {
     this.questionBank = questionBank
@@ -13,6 +15,11 @@ export class QuizGame {
 
   public getNextQuestion(): Question {
     this.currentQuestion = this.questionBank.getRandomQuestion()
+  
+    if (!this.questionBank.hasMoreQuestions()) {
+      this.gameState = GameState.GAME_OVER 
+    }
+  
     return this.currentQuestion
   }
  
@@ -29,5 +36,9 @@ export class QuizGame {
 
   public getScore(): number {
     return this.score
+  }
+
+  public isGameOver(): boolean {
+    return this.gameState === GameState.GAME_OVER
   }
 }

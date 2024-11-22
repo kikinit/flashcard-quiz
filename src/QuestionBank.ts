@@ -35,4 +35,9 @@ export class QuestionBank {
     }
     this.questions = this.questions.filter(q => q !== question)
   }
+
+  public hasMoreQuestions(): boolean {
+    return this.questions.some(question => !this.attemptedQuestions.has(question))
+  }
+  
 }
