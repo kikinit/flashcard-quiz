@@ -6,7 +6,7 @@ describe('QuestionBank', () => {
   let question1: Question
   let question2: Question
   let question3: Question
-  let questionBank: QuestionBank
+  let sut: QuestionBank
 
   beforeEach(() => {
 
@@ -26,22 +26,22 @@ describe('QuestionBank', () => {
       'Single responsibility'
     )
 
-    questionBank = new QuestionBank()
-    questionBank.addQuestion(question1)
-    questionBank.addQuestion(question2)
-    questionBank.addQuestion(question3)
+    sut = new QuestionBank()
+    sut.addQuestion(question1)
+    sut.addQuestion(question2)
+    sut.addQuestion(question3)
   })
 
   it('should return a random question from the bank', () => {
-    const randomQuestion = questionBank.getRandomQuestion()
+    const randomQuestion = sut.getRandomQuestion()
     expect([question1, question2, question3]).toContain(randomQuestion)
   })
 
   it('should remove a question from the QuestionBank', () => {
-    questionBank.removeQuestion(question2)
+    sut.removeQuestion(question2)
 
     // Verify question2 is removed.
-    const randomQuestion = questionBank.getRandomQuestion()
+    const randomQuestion = sut.getRandomQuestion()
     expect(randomQuestion).not.toBe(question2)
 
     // Verify question1 and question3 are still present.
@@ -50,8 +50,8 @@ describe('QuestionBank', () => {
 
   it('should throw a DuplicateQuestionError if a duplicate question is added', () => {
     expect(() => {
-      questionBank.addQuestion(question1)
-      questionBank.addQuestion(question1) // Add duplicate.
+      sut.addQuestion(question1)
+      sut.addQuestion(question1) // Add duplicate.
     }).toThrow(DuplicateQuestionError)
   })
   
@@ -63,7 +63,7 @@ describe('QuestionBank', () => {
     )
   
     expect(() => {
-      questionBank.removeQuestion(nonExistentQuestion)
+      sut.removeQuestion(nonExistentQuestion)
     }).toThrow(QuestionNotFoundError)
   })
   

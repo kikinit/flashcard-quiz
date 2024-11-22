@@ -7,7 +7,7 @@ describe('QuizGame', () => {
   let question1: Question
   let question2: Question
   let questionBank: QuestionBank
-  let quizGame: QuizGame
+  let sut: QuizGame
   const questionStringA = 'What does the term "hoisting" mean in JavaScript?'
   const optionA1 = 'Variable declaration'
   const optionA2 = 'Loop optimization'
@@ -37,29 +37,29 @@ describe('QuizGame', () => {
     questionBank.addQuestion(question1)
     questionBank.addQuestion(question2)
 
-    quizGame = new QuizGame(questionBank)
+    sut = new QuizGame(questionBank)
   })
 
   it('should fetch a random question from the QuestionBank', () => {
-    const question = quizGame.getNextQuestion()
+    const question = sut.getNextQuestion()
     expect([question1, question2]).toContain(question)
   })
 
   it('should validate a submitted answer for the current question', () => {
-    jest.spyOn(quizGame, 'getNextQuestion').mockImplementation(() => {
-      quizGame['currentQuestion'] = question1
+    jest.spyOn(sut, 'getNextQuestion').mockImplementation(() => {
+      sut['currentQuestion'] = question1
       return question1
     })
 
-    quizGame.getNextQuestion()
+    sut.getNextQuestion()
 
-    expect(quizGame.checkAnswer(correctAnswerA)).toBe(true)
-    expect(quizGame.checkAnswer(optionA2)).toBe(false)
+    expect(sut.checkAnswer(correctAnswerA)).toBe(true)
+    expect(sut.checkAnswer(optionA2)).toBe(false)
   })
 
   it('should throw a NoCurrentQuestionError error if checkAnswer is called without a current question', () => {
     expect(() => {
-      quizGame.checkAnswer('Some answer')
+      sut.checkAnswer('Some answer')
     }).toThrow(NoCurrentQuestionError)
   })
   
