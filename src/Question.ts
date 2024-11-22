@@ -1,10 +1,13 @@
 import { InvalidAnswerError } from './errors/InvalidAnswerError'
 
 export class Question {
+  private hintsUsed: number = 0
+
   constructor(
     private text: string,
     private options: string[],
-    private answer: string
+    private answer: string,
+    private hints: string[]
   ) {}
 
   public getText(): string {
@@ -23,8 +26,13 @@ export class Question {
   }
 
   public getHint(): string {
-    const randomIndex = Math.floor(Math.random() * this.answer.length)
-    return this.answer[randomIndex]
+    if (this.hintsUsed >= this.hints.length) {
+      throw new Error('No more hints available.')
+    }
+  
+    const hint = this.hints[this.hintsUsed]
+    this.hintsUsed++
+    return hint
   }
 
   private getAnswer(): string {

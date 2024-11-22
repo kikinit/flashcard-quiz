@@ -64,13 +64,13 @@ export class QuizGame {
     }
 
     this.hintsUsed++
+    const hint = currentQuestion!.getHint()
     const remainingReward = this.CORRECT_ANSWER_REWARD - this.hintsUsed * this.HINT_PENALTY
-
     const adjustedReward = Math.max(remainingReward, 2)
     this.scoreboard.resetScore()
     this.scoreboard.increaseScore(adjustedReward)
 
-    return currentQuestion.getHint()
+    return hint
   }
 
   private ensureCurrentQuestion(): Question {

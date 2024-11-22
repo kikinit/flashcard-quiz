@@ -7,20 +7,31 @@ describe('QuizGame', () => {
   let questionBank: QuestionBank
   let sut: QuizGame
 
-  // Grouped data for question A.
+  // Question data.
   const questionA = {
     text: 'What does the term "hoisting" mean in JavaScript?',
     options: ['Variable declaration', 'Loop optimization', 'Runtime scope'],
     correctAnswer: 'Variable declaration',
     wrongAnswer: 'Loop optimization',
+    hints: [
+      'It describes a default behavior of JavaScript interpreters.',
+      'This term applies to both var and function declarations but not to let and const.',
+      'It ensures variables are accessible before initialization.',
+      'It moves declarations to the top of their scope.'
+    ]
   }
 
-  // Grouped data for question B.
   const questionB = {
     text: 'Which HTTP status code is used when a resource is successfully created?',
     options: ['200', '201', '204'],
     correctAnswer: '201',
     wrongAnswer: '204',
+    hints: [
+      'It signifies the successful creation of a resource, such as a new database entry.',
+      'It is commonly used in REST APIs to indicate resource creation.',
+      'This status code is often associated with creating new resources via POST requests.',
+      'This code lies between 200 OK and 204 No Content.'
+    ]
   }
 
   beforeEach(() => {
@@ -38,8 +49,18 @@ describe('QuizGame', () => {
   }
 
   it('should fetch a random question from the QuestionBank', () => {
-    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
-    const question2 = new Question(questionB.text, questionB.options, questionB.correctAnswer)
+    const question1 = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
+    const question2 = new Question(
+      questionB.text,
+      questionB.options,
+      questionB.correctAnswer,
+      questionB.hints
+    )
 
     questionBank.addQuestion(question1)
     questionBank.addQuestion(question2)
@@ -49,7 +70,12 @@ describe('QuizGame', () => {
   })
 
   it('should validate a submitted answer for the current question', () => {
-    const mockedQuestion = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const mockedQuestion = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     setupMockedCurrentQuestion(mockedQuestion)
 
     sut.getNextQuestion()
@@ -65,7 +91,12 @@ describe('QuizGame', () => {
   })
 
   it('should track the player score based on correct and incorrect answers', () => {
-    const mockedQuestion = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const mockedQuestion = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     setupMockedCurrentQuestion(mockedQuestion)
 
     // Ensure the score starts at 0.
@@ -82,7 +113,12 @@ describe('QuizGame', () => {
   })
 
   it('should transition to GAME_OVER state after fetching the last question', () => {
-    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question1 = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     questionBank.addQuestion(question1)
   
     sut.getNextQuestion()
@@ -91,7 +127,12 @@ describe('QuizGame', () => {
   })
  
   it('should prevent fetching a question after the game is over', () => {
-    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question1 = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     questionBank.addQuestion(question1)
 
     sut.getNextQuestion()
@@ -100,7 +141,12 @@ describe('QuizGame', () => {
   })
 
   it('should reset the game state, score, and attempted questions on restart', () => {
-    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question1 = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     questionBank.addQuestion(question1)
   
     // Simulate game progression.
@@ -122,7 +168,12 @@ describe('QuizGame', () => {
   })
 
   it('should hold the final score at the end of the game', () => {
-    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question1 = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     questionBank.addQuestion(question1)
   
     sut.getNextQuestion()
@@ -133,7 +184,12 @@ describe('QuizGame', () => {
   })
 
   it('should deduct points for each hint requested and limit hints to 4', () => {
-    const question = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question = new Question(
+      questionA.text,
+      questionA.options,
+      questionA.correctAnswer,
+      questionA.hints
+    )
     questionBank.addQuestion(question)
     sut.getNextQuestion()
 
