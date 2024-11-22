@@ -1,7 +1,7 @@
 import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
 import { GameState } from './GameState'
-import { NoCurrentQuestionError} from './errors'
+import { NoCurrentQuestionError, GameOverError } from './errors'
 
 export class QuizGame {
   private questionBank: QuestionBank
@@ -14,6 +14,10 @@ export class QuizGame {
   }
 
   public getNextQuestion(): Question {
+    if (this.gameState === GameState.GAME_OVER) {
+      throw new GameOverError()
+    }
+
     this.currentQuestion = this.questionBank.getRandomQuestion()
   
     if (!this.questionBank.hasMoreQuestions()) {
