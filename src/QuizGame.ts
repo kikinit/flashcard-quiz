@@ -6,6 +6,9 @@ import { NoCurrentQuestionError, GameOverError } from './errors'
 
 export class QuizGame {
   private readonly CORRECT_ANSWER_REWARD = 10
+  private readonly HINT_PENALTY = 2
+  private readonly MAX_HINTS = 4
+  private hintsUsed: number = 0
   private questionBank: QuestionBank
   private currentQuestion: Question | null = null
   private gameState: GameState = GameState.PLAYING
@@ -51,6 +54,23 @@ export class QuizGame {
     this.scoreboard.resetScore()
     this.currentQuestion = null
     this.questionBank.resetAttemptedQuestions()
+  }
+
+  public requestHint(): string {
+    const currentQuestion = this.ensureCurrentQuestion()
+
+    if (this.hintsUsed >= this.MAX_HINTS) {
+      throw new Error('Maximum number of hints reached.')
+    }
+
+    this.hintsUsed++
+    const remainingReward = this.CORRECT_ANSWER_REWARD - this.hintsUsed * this.HINT_PENALTY
+
+    const adjustedReward = Math.max(remainingReward, 2)
+    this.scoreboard.resetScore()
+    this.scoreboard.increaseScore(adjustedReward)
+
+    return currentQuestion.getHint()
   }
 
   private ensureCurrentQuestion(): Question {
