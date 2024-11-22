@@ -1,5 +1,5 @@
 import { Question } from '../Question'
-import { InvalidAnswerError } from '../errors'
+import { InvalidAnswerError, NoMoreHintsError } from '../errors'
 
 describe('Question', () => {
   let sut: Question
@@ -50,6 +50,6 @@ describe('Question', () => {
     expect(sut.getHint()).toBe(questionData.hints[3])
 
     // Check for error when all hints are used.
-    expect(() => sut.getHint()).toThrow('No more hints available.')
+    expect(() => sut.getHint()).toThrow(NoMoreHintsError)
   })
 })

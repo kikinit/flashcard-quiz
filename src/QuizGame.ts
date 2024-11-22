@@ -2,7 +2,7 @@ import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
 import { Scoreboard } from './Scoreboard'
 import { GameState } from './GameState'
-import { NoCurrentQuestionError, GameOverError } from './errors'
+import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from './errors'
 
 export class QuizGame {
   private readonly CORRECT_ANSWER_REWARD = 10
@@ -60,7 +60,7 @@ export class QuizGame {
     const currentQuestion = this.ensureCurrentQuestion()
 
     if (this.hintsUsed >= this.MAX_HINTS) {
-      throw new Error('Maximum number of hints reached.')
+      throw new MaxHintsLimitError()
     }
 
     this.hintsUsed++

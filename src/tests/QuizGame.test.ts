@@ -1,7 +1,7 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
-import { NoCurrentQuestionError, GameOverError } from '../errors'
+import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from '../errors'
 
 describe('QuizGame', () => {
   let questionBank: QuestionBank
@@ -203,6 +203,6 @@ describe('QuizGame', () => {
   
     sut.requestHint()
     sut.requestHint()
-    expect(() => sut.requestHint()).toThrow(Error) // Cannot request more than 4 hints.
+    expect(() => sut.requestHint()).toThrow(MaxHintsLimitError) // Cannot request more than 4 hints.
   })
 })

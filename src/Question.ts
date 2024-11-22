@@ -1,4 +1,4 @@
-import { InvalidAnswerError } from './errors/InvalidAnswerError'
+import { InvalidAnswerError, NoMoreHintsError } from './errors'
 
 export class Question {
   private hintsUsed: number = 0
@@ -27,7 +27,7 @@ export class Question {
 
   public getHint(): string {
     if (this.hintsUsed >= this.hints.length) {
-      throw new Error('No more hints available.')
+      throw new NoMoreHintsError()
     }
   
     const hint = this.hints[this.hintsUsed]
