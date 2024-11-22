@@ -12,6 +12,7 @@ describe('QuizGame', () => {
     text: 'What does the term "hoisting" mean in JavaScript?',
     options: ['Variable declaration', 'Loop optimization', 'Runtime scope'],
     correctAnswer: 'Variable declaration',
+    wrongAnswer: 'Loop optimization',
   }
 
   // Grouped data for question B.
@@ -19,6 +20,7 @@ describe('QuizGame', () => {
     text: 'Which HTTP status code is used when a resource is successfully created?',
     options: ['200', '201', '204'],
     correctAnswer: '201',
+    wrongAnswer: '204',
   }
 
   beforeEach(() => {
@@ -53,7 +55,7 @@ describe('QuizGame', () => {
     sut.getNextQuestion()
 
     expect(sut.checkAnswer(questionA.correctAnswer)).toBe(true)
-    expect(sut.checkAnswer(questionA.options[1])).toBe(false)
+    expect(sut.checkAnswer(questionA.wrongAnswer)).toBe(false)
   })
 
   it('should throw a NoCurrentQuestionError if checkAnswer is called without a current question', () => {
