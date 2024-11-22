@@ -81,4 +81,14 @@ describe('QuizGame', () => {
     expect(sut.getScore()).toBe(1)
   })
 
+  it('should transition to GAME_OVER state after fetching the last question', () => {
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    questionBank.addQuestion(question1)
+  
+    sut.getNextQuestion()
+
+    expect(sut.isGameOver()).toBe(true)
+  })
+ 
+
 })
