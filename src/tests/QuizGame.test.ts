@@ -130,5 +130,23 @@ describe('QuizGame', () => {
   
     expect(sut.getScore()).toBe(10)
     expect(sut.isGameOver()).toBe(true)
-  })  
+  })
+
+  it('should deduct points for each hint requested and limit hints to 4', () => {
+    const question = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    questionBank.addQuestion(question)
+    sut.getNextQuestion()
+
+    expect(sut.getScore()).toBe(0)
+  
+    sut.requestHint()
+    expect(sut.getScore()).toBe(sut['CORRECT_ANSWER_REWARD'] - 2)
+  
+    sut.requestHint()
+    expect(sut.getScore()).toBe(sut['CORRECT_ANSWER_REWARD'] - 4)
+  
+    sut.requestHint()
+    sut.requestHint()
+    expect(() => sut.requestHint()).toThrow(Error) // Cannot request more than 4 hints.
+  })
 })
