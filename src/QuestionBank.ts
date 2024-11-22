@@ -40,4 +40,8 @@ export class QuestionBank {
     return this.questions.some(question => !this.attemptedQuestions.has(question))
   }
   
+  public resetAttemptedQuestions(): void {
+    this.attemptedQuestions.clear()
+  }
+  
 }

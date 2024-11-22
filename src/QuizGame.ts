@@ -45,4 +45,11 @@ export class QuizGame {
   public isGameOver(): boolean {
     return this.gameState === GameState.GAME_OVER
   }
+
+  public restart(): void {
+    this.gameState = GameState.PLAYING
+    this.score = 0
+    this.currentQuestion = null
+    this.questionBank.resetAttemptedQuestions()
+  }  
 }
