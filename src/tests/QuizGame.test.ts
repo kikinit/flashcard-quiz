@@ -43,5 +43,16 @@ describe('QuizGame', () => {
     const question = quizGame.getNextQuestion()
     expect([question1, question2]).toContain(question)
   })
-  
+
+  it('should validate a submitted answer for the current question', () => {
+    jest.spyOn(quizGame, 'getNextQuestion').mockImplementation(() => {
+      quizGame['currentQuestion'] = question1
+      return question1
+    })
+
+    quizGame.getNextQuestion()
+
+    expect(quizGame.checkAnswer(correctAnswerA)).toBe(true)
+    expect(quizGame.checkAnswer(optionA2)).toBe(false)
+  })
 })
