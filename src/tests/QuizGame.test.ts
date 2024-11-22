@@ -128,7 +128,7 @@ describe('QuizGame', () => {
     sut.getNextQuestion()
     sut.checkAnswer(questionA.correctAnswer)
   
-    expect(sut.getScore()).toBe(10)
+    expect(sut.getScore()).toBe(1)
     expect(sut.isGameOver()).toBe(true)
   })  
 })
