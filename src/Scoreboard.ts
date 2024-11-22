@@ -8,4 +8,8 @@ export class Scoreboard {
   public increaseScore(amount: number): void {
     this.score += amount
   }
+
+  public resetScore(): void {
+    this.score = 0
+  }
 }
