@@ -4,63 +4,60 @@ import { QuizGame } from '../QuizGame'
 import { NoCurrentQuestionError } from '../errors'
 
 describe('QuizGame', () => {
-  let question1: Question
-  let question2: Question
   let questionBank: QuestionBank
   let sut: QuizGame
-  const questionStringA = 'What does the term "hoisting" mean in JavaScript?'
-  const optionA1 = 'Variable declaration'
-  const optionA2 = 'Loop optimization'
-  const optionA3 = 'Runtime scope'
-  const optionsArrayA = [optionA1, optionA2, optionA3]
-  const correctAnswerA = optionA1
-  const questionStringB = 'Which HTTP status code is used when a resource is successfully created?'
-  const optionB1 = '200'
-  const optionB2 = '201'
-  const optionB3 = '204'
-  const optionsArrayB = [optionB1, optionB2, optionB3]
-  const correctAnswerB = optionB2
+
+  // Grouped data for question A.
+  const questionA = {
+    text: 'What does the term "hoisting" mean in JavaScript?',
+    options: ['Variable declaration', 'Loop optimization', 'Runtime scope'],
+    correctAnswer: 'Variable declaration',
+  }
+
+  // Grouped data for question B.
+  const questionB = {
+    text: 'Which HTTP status code is used when a resource is successfully created?',
+    options: ['200', '201', '204'],
+    correctAnswer: '201',
+  }
 
   beforeEach(() => {
-    question1 = new Question(
-      questionStringA,
-      optionsArrayA,
-      correctAnswerA
-    )
-    question2 = new Question(
-      questionStringB,
-      optionsArrayB,
-      correctAnswerB
-    )
+    // Create questions using the grouped data.
+    const question1 = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+    const question2 = new Question(questionB.text, questionB.options, questionB.correctAnswer)
 
+    // Initialize QuestionBank and add questions.
     questionBank = new QuestionBank()
     questionBank.addQuestion(question1)
     questionBank.addQuestion(question2)
 
+    // Initialize the QuizGame system under test.
     sut = new QuizGame(questionBank)
   })
 
   it('should fetch a random question from the QuestionBank', () => {
     const question = sut.getNextQuestion()
-    expect([question1, question2]).toContain(question)
+    expect([
+      new Question(questionA.text, questionA.options, questionA.correctAnswer),
+      new Question(questionB.text, questionB.options, questionB.correctAnswer),
+    ]).toContainEqual(question)
   })
 
   it('should validate a submitted answer for the current question', () => {
     jest.spyOn(sut, 'getNextQuestion').mockImplementation(() => {
-      sut['currentQuestion'] = question1
-      return question1
+      sut['currentQuestion'] = new Question(questionA.text, questionA.options, questionA.correctAnswer)
+      return sut['currentQuestion']
     })
 
     sut.getNextQuestion()
 
-    expect(sut.checkAnswer(correctAnswerA)).toBe(true)
-    expect(sut.checkAnswer(optionA2)).toBe(false)
+    expect(sut.checkAnswer(questionA.correctAnswer)).toBe(true)
+    expect(sut.checkAnswer(questionA.options[1])).toBe(false)
   })
 
-  it('should throw a NoCurrentQuestionError error if checkAnswer is called without a current question', () => {
+  it('should throw a NoCurrentQuestionError if checkAnswer is called without a current question', () => {
     expect(() => {
       sut.checkAnswer('Some answer')
     }).toThrow(NoCurrentQuestionError)
   })
-  
 })
