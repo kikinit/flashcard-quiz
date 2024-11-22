@@ -1,5 +1,5 @@
 import { Question } from '../Question'
-import { InvalidAnswerError } from '../errors/InvalidAnswerError'
+import { InvalidAnswerError } from '../errors'
 
 describe('Question', () => {
   it('should create a question with text, options, and a correct answer', () => {

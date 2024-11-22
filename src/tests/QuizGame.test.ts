@@ -1,7 +1,7 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
-import { NoCurrentQuestionError } from '../errors/NoCurrentQuestionError'
+import { NoCurrentQuestionError } from '../errors'
 
 describe('QuizGame', () => {
   let question1: Question
