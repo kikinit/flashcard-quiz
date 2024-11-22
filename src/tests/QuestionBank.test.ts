@@ -1,6 +1,6 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
-import { DuplicateQuestionError, QuestionNotFoundError } from '../errors'
+import { DuplicateQuestionError, QuestionNotFoundError, NoMoreQuestionsError } from '../errors'
 
 describe('QuestionBank', () => {
   let question1: Question
@@ -66,6 +66,13 @@ describe('QuestionBank', () => {
       sut.removeQuestion(nonExistentQuestion)
     }).toThrow(QuestionNotFoundError)
   })
+
+
+  it('should throw NoMoreQuestionsError when there are no questions left', () => {
+    const emptyQuestionBank = new QuestionBank()
   
+    // Attempting to fetch a random question from an empty QuestionBank.
+    expect(() => emptyQuestionBank.getRandomQuestion()).toThrow(NoMoreQuestionsError)
+  })
 
 })
