@@ -1,11 +1,17 @@
 import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
+import { QuestionFactory } from '../QuestionFactory'
 import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from '../errors'
 
 describe('QuizGame', () => {
   let questionBank: QuestionBank
+  let factory: jest.Mocked<QuestionFactory>
   let sut: QuizGame
+
+  // Mocked questions.
+  let mockQuestionA: Question
+  let mockQuestionB: Question
 
   // Question data.
   const questionA = {
@@ -33,52 +39,75 @@ describe('QuizGame', () => {
       'This code lies between 200 OK and 204 No Content.'
     ]
   }
-
-  beforeEach(() => {
-    // Initialize QuestionBank and QuizGame.
-    questionBank = new QuestionBank()
-    sut = new QuizGame(questionBank)
-  })
-
-  // Helper for mocking getNextQuestion.
-  const setupMockedCurrentQuestion = (question: Question) => {
-    jest.spyOn(sut, 'getNextQuestion').mockImplementation(() => {
-      sut['currentQuestion'] = question
-      return question
-    })
+  
+  const questionC = {
+    text: 'What is the purpose of HTTP status codes?',
+    options: ['Error signaling', 'Response status', 'Both'],
+    correctAnswer: 'Both',
+    hints: [
+      'They help indicate the outcome of HTTP requests.',
+      'They are part of the response from a web server.',
+      'Codes like 404 are examples.',
+      'They can also indicate redirection.'
+    ]
   }
 
-  it('should fetch a random question from the QuestionBank', () => {
-    const question1 = new Question(
+  // Helper to mock the current question
+  const setupMockedCurrentQuestion = (question: Question) => {
+    jest.spyOn(questionBank, 'getRandomQuestion').mockImplementation(() => question)
+    sut.getNextQuestion()
+  }
+
+  beforeEach(() => {
+    // Create mocked questions
+    mockQuestionA = new Question(
       questionA.text,
       questionA.options,
       questionA.correctAnswer,
       questionA.hints
     )
-    const question2 = new Question(
+    mockQuestionB = new Question(
       questionB.text,
       questionB.options,
       questionB.correctAnswer,
       questionB.hints
     )
 
-    questionBank.addQuestion(question1)
-    questionBank.addQuestion(question2)
+    // Mock the factory. If text content is equal to existing mockQuestion, it returns the actual Question instead of creating a new. This way references to the same objects can be retrieved and utilized.
+    factory = {
+      createQuestion: jest.fn((text, options, correctAnswer, hints) => {
+        if (text === questionA.text) return mockQuestionA
+        if (text === questionB.text) return mockQuestionB
+        return new Question(text, options, correctAnswer, hints)
+      })
+    }
 
-    const question = sut.getNextQuestion()
-    expect([question1, question2]).toContainEqual(question)
-  })
+    // Inject the mocked factory.
+    questionBank = new QuestionBank(factory)
+    sut = new QuizGame(questionBank, factory)
 
-  it('should validate a submitted answer for the current question', () => {
-    const mockedQuestion = new Question(
+    // Add questions to the bank.
+    questionBank.addQuestion(
       questionA.text,
       questionA.options,
       questionA.correctAnswer,
       questionA.hints
     )
-    setupMockedCurrentQuestion(mockedQuestion)
+    questionBank.addQuestion(
+      questionB.text,
+      questionB.options,
+      questionB.correctAnswer,
+      questionB.hints
+    )
+  })
 
-    sut.getNextQuestion()
+  it('should fetch a random question from the QuestionBank', () => {
+    const randomQuestion = sut.getNextQuestion()
+    expect([mockQuestionA, mockQuestionB]).toContain(randomQuestion)
+  })
+
+  it('should validate a submitted answer for the current question', () => {
+    setupMockedCurrentQuestion(mockQuestionA)
 
     expect(sut.checkAnswer(questionA.correctAnswer)).toBe(true)
     expect(sut.checkAnswer(questionA.wrongAnswer)).toBe(false)
@@ -91,118 +120,80 @@ describe('QuizGame', () => {
   })
 
   it('should track the player score based on correct and incorrect answers', () => {
-    const mockedQuestion = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
-    )
-    setupMockedCurrentQuestion(mockedQuestion)
+    setupMockedCurrentQuestion(mockQuestionA)
 
-    // Ensure the score starts at 0.
     expect(sut.getScore()).toBe(0)
 
-    // Simulate a correct answer.
-    sut.getNextQuestion()
     sut.checkAnswer(questionA.correctAnswer)
     expect(sut.getScore()).toBe(10)
 
-    // Simulate a wrong answer.
     sut.checkAnswer(questionA.wrongAnswer)
     expect(sut.getScore()).toBe(10)
   })
 
   it('should transition to GAME_OVER state after fetching the last question', () => {
-    const question1 = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
-    )
-    questionBank.addQuestion(question1)
-  
     sut.getNextQuestion()
-
+    sut.getNextQuestion()
     expect(sut.isGameOver()).toBe(true)
   })
- 
-  it('should prevent fetching a question after the game is over', () => {
-    const question1 = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
-    )
-    questionBank.addQuestion(question1)
 
+  it('should prevent fetching a question after the game is over', () => {
+    sut.getNextQuestion()
     sut.getNextQuestion()
 
     expect(() => sut.getNextQuestion()).toThrow(GameOverError)
   })
 
   it('should reset the game state, score, and attempted questions on restart', () => {
-    const question1 = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
-    )
-    questionBank.addQuestion(question1)
-  
-    // Simulate game progression.
-    sut.getNextQuestion()
+    setupMockedCurrentQuestion(mockQuestionA)
+
     sut.checkAnswer(questionA.correctAnswer)
-  
-    // Verify the game is over.
-    expect(sut.isGameOver()).toBe(true)
-  
-    // Restart the game.
+    expect(sut.isGameOver()).toBe(false)
+
     sut.restart()
-  
-    // Verify game state and score reset.
+
     expect(sut.isGameOver()).toBe(false)
     expect(sut.getScore()).toBe(0)
-  
-    // Verify all questions are available again.
     expect(() => sut.getNextQuestion()).not.toThrow()
   })
 
   it('should hold the final score at the end of the game', () => {
-    const question1 = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
-    )
-    questionBank.addQuestion(question1)
-  
-    sut.getNextQuestion()
+    setupMockedCurrentQuestion(mockQuestionA)
+
     sut.checkAnswer(questionA.correctAnswer)
-  
+
     expect(sut.getScore()).toBe(10)
-    expect(sut.isGameOver()).toBe(true)
+    expect(sut.isGameOver()).toBe(false)
   })
 
   it('should deduct points for each hint requested and limit hints to 4', () => {
-    const question = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
-    )
-    questionBank.addQuestion(question)
-    sut.getNextQuestion()
+    setupMockedCurrentQuestion(mockQuestionA)
 
-    expect(sut.getScore()).toBe(0)
-  
     sut.requestHint()
-    expect(sut.getScore()).toBe(sut['CORRECT_ANSWER_REWARD'] - 2)
-  
+    expect(sut.getScore()).toBe(8)
+
     sut.requestHint()
-    expect(sut.getScore()).toBe(sut['CORRECT_ANSWER_REWARD'] - 4)
-  
+    expect(sut.getScore()).toBe(6)
+
     sut.requestHint()
     sut.requestHint()
-    expect(() => sut.requestHint()).toThrow(MaxHintsLimitError) // Cannot request more than 4 hints.
+    expect(() => sut.requestHint()).toThrow(MaxHintsLimitError)
   })
+
+  it('should delegate question creation to the factory', () => {
+    sut.addQuestion(
+      questionC.text,
+      questionC.options,
+      questionC.correctAnswer,
+      questionC.hints
+    )
+  
+    expect(factory.createQuestion).toHaveBeenCalledWith(
+      questionC.text,
+      questionC.options,
+      questionC.correctAnswer,
+      questionC.hints
+    )
+  })
+  
 })

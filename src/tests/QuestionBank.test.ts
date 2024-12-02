@@ -1,16 +1,23 @@
-import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
-import { DuplicateQuestionError, QuestionNotFoundError, NoMoreQuestionsError } from '../errors'
+import { QuestionFactory } from '../QuestionFactory'
+import { Question } from '../Question'
+import {
+  DuplicateQuestionError,
+  QuestionNotFoundError,
+  NoMoreQuestionsError
+} from '../errors'
 
 describe('QuestionBank', () => {
   let sut: QuestionBank
+  let factory: jest.Mocked<QuestionFactory>
+  let mockQuestionA: Question
+  let mockQuestionB: Question
+  let mockQuestionC: Question
 
-  // Question data.
-  const questionA = {
+  const questionDataA = {
     text: 'What does the term "hoisting" mean in JavaScript?',
     options: ['Variable declaration', 'Loop optimization', 'Runtime scope'],
     correctAnswer: 'Variable declaration',
-    wrongAnswer: 'Loop optimization',
     hints: [
       'It describes a default behavior of JavaScript interpreters.',
       'This term applies to both var and function declarations but not to let and const.',
@@ -19,11 +26,10 @@ describe('QuestionBank', () => {
     ]
   }
 
-  const questionB = {
+  const questionDataB = {
     text: 'Which HTTP status code is used when a resource is successfully created?',
     options: ['200', '201', '204'],
     correctAnswer: '201',
-    wrongAnswer: '204',
     hints: [
       'It signifies the successful creation of a resource, such as a new database entry.',
       'It is commonly used in REST APIs to indicate resource creation.',
@@ -32,7 +38,7 @@ describe('QuestionBank', () => {
     ]
   }
 
-  const questionC = {
+  const questionDataC = {
     text: 'In SOLID design principles, what does the `S` stand for?',
     options: ['Single responsibility', 'Simple design', 'System dependency'],
     correctAnswer: 'Single responsibility',
@@ -44,56 +50,80 @@ describe('QuestionBank', () => {
     ]
   }
 
-  let question1: Question
-  let question2: Question
-  let question3: Question
-
   beforeEach(() => {
-    question1 = new Question(
-      questionA.text,
-      questionA.options,
-      questionA.correctAnswer,
-      questionA.hints
+    mockQuestionA = new Question(
+      questionDataA.text,
+      questionDataA.options,
+      questionDataA.correctAnswer,
+      questionDataA.hints
     )
-    question2 = new Question(
-      questionB.text,
-      questionB.options,
-      questionB.correctAnswer,
-      questionB.hints
+    mockQuestionB = new Question(
+      questionDataB.text,
+      questionDataB.options,
+      questionDataB.correctAnswer,
+      questionDataB.hints
     )
-    question3 = new Question(
-      questionC.text,
-      questionC.options,
-      questionC.correctAnswer,
-      questionC.hints
+    mockQuestionC = new Question(
+      questionDataC.text,
+      questionDataC.options,
+      questionDataC.correctAnswer,
+      questionDataC.hints
     )
 
-    sut = new QuestionBank()
-    sut.addQuestion(question1)
-    sut.addQuestion(question2)
-    sut.addQuestion(question3)
+    // Mock the QuestionFactory.
+    factory = {
+      createQuestion: jest.fn((text, options, correctAnswer, hints) => {
+        if (text === questionDataA.text) return mockQuestionA
+        if (text === questionDataB.text) return mockQuestionB
+        if (text === questionDataC.text) return mockQuestionC
+        return new Question(text, options, correctAnswer, hints)
+      })
+    }
+
+    sut = new QuestionBank(factory)
+    sut.addQuestion(
+      questionDataA.text,
+      questionDataA.options,
+      questionDataA.correctAnswer,
+      questionDataA.hints
+    )
+    sut.addQuestion(
+      questionDataB.text,
+      questionDataB.options,
+      questionDataB.correctAnswer,
+      questionDataB.hints
+    )
+    sut.addQuestion(
+      questionDataC.text,
+      questionDataC.options,
+      questionDataC.correctAnswer,
+      questionDataC.hints
+    )
   })
 
   it('should return a random question from the bank', () => {
     const randomQuestion = sut.getRandomQuestion()
-    expect([question1, question2, question3]).toContain(randomQuestion)
+    expect([mockQuestionA, mockQuestionB, mockQuestionC]).toContain(randomQuestion)
   })
 
   it('should remove a question from the QuestionBank', () => {
-    sut.removeQuestion(question2)
+    sut.removeQuestion(mockQuestionB)
 
-    // Verify question2 is removed.
+    const remainingQuestions = [mockQuestionA, mockQuestionC]
     const randomQuestion = sut.getRandomQuestion()
-    expect(randomQuestion).not.toBe(question2)
 
-    // Verify question1 and question3 are still present.
-    expect([question1, question3]).toContain(randomQuestion)
+    expect(randomQuestion).not.toBe(mockQuestionB)
+    expect(remainingQuestions).toContain(randomQuestion)
   })
 
   it('should throw a DuplicateQuestionError if a duplicate question is added', () => {
     expect(() => {
-      sut.addQuestion(question1)
-      sut.addQuestion(question1) // Add duplicate.
+      sut.addQuestion(
+        questionDataA.text,
+        questionDataA.options,
+        questionDataA.correctAnswer,
+        questionDataA.hints
+      )
     }).toThrow(DuplicateQuestionError)
   })
 
@@ -116,9 +146,10 @@ describe('QuestionBank', () => {
   })
 
   it('should throw NoMoreQuestionsError when there are no questions left', () => {
-    const emptyQuestionBank = new QuestionBank()
+    sut.removeQuestion(mockQuestionA)
+    sut.removeQuestion(mockQuestionB)
+    sut.removeQuestion(mockQuestionC)
 
-    // Attempting to fetch a random question from an empty QuestionBank.
-    expect(() => emptyQuestionBank.getRandomQuestion()).toThrow(NoMoreQuestionsError)
+    expect(() => sut.getRandomQuestion()).toThrow(NoMoreQuestionsError)
   })
 })
