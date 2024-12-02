@@ -1,5 +1,6 @@
 import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
+import { QuestionFactory } from './QuestionFactory'
 import { Scoreboard } from './Scoreboard'
 import { GameState } from './GameState'
 import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from './errors'
@@ -10,12 +11,29 @@ export class QuizGame {
   private readonly MAX_HINTS = 4
   private hintsUsed: number = 0
   private questionBank: QuestionBank
+  private factory: QuestionFactory
   private currentQuestion: Question | null = null
   private gameState: GameState = GameState.PLAYING
   private scoreboard: Scoreboard = new Scoreboard()
-  
-  constructor(questionBank: QuestionBank) {
+
+  constructor(questionBank: QuestionBank, factory: QuestionFactory) {
     this.questionBank = questionBank
+    this.factory = factory
+  }
+
+  public addQuestion(
+    text: string,
+    options: string[],
+    correctAnswer: string,
+    hints: string[]
+  ): void {
+    const question = this.factory.createQuestion(text, options, correctAnswer, hints)
+    this.questionBank.addQuestion(
+      question.getText(),
+      question.getOptions(),
+      question['answer'],
+      question['hints']
+    )
   }
 
   public getNextQuestion(): Question {
@@ -24,14 +42,14 @@ export class QuizGame {
     }
 
     this.currentQuestion = this.questionBank.getRandomQuestion()
-  
+
     if (!this.questionBank.hasMoreQuestions()) {
-      this.gameState = GameState.GAME_OVER 
+      this.gameState = GameState.GAME_OVER
     }
-  
+
     return this.currentQuestion
   }
- 
+
   public checkAnswer(answer: string): boolean {
     const currentQuestion = this.ensureCurrentQuestion()
     const isCorrect = currentQuestion.checkAnswer(answer)
@@ -64,7 +82,7 @@ export class QuizGame {
     }
 
     this.hintsUsed++
-    const hint = currentQuestion!.getHint()
+    const hint = currentQuestion.getHint()
     const remainingReward = this.CORRECT_ANSWER_REWARD - this.hintsUsed * this.HINT_PENALTY
     const adjustedReward = Math.max(remainingReward, 2)
     this.scoreboard.resetScore()
@@ -78,5 +96,5 @@ export class QuizGame {
       throw new NoCurrentQuestionError()
     }
     return this.currentQuestion
-  }  
+  }
 }
