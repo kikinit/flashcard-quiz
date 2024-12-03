@@ -1,10 +1,26 @@
 import { Question } from './Question'
 
 export class ConsoleUI {
-  displayQuestion(question: Question) {
-    console.log(question.getText())
+  private input: (callback: (input: string) => void) => void
+  private output: (message: string) => void
+
+  constructor(
+    input = (callback: (input: string) => void) => {
+      process.stdin.on('data', (chunk: Buffer | string) => {
+        const input = chunk.toString().trim()
+        callback(input)
+      })
+    },
+    output = console.log
+  ) {
+    this.input = input
+    this.output = output
+  }
+
+  public displayQuestion(question: Question) {
+    this.output(question.getText())
     question.getOptions().forEach((option, index) => {
-      console.log(`${index + 1}. ${option}`)
+      this.output(`${index + 1}. ${option}`)
     })
   }
 }
