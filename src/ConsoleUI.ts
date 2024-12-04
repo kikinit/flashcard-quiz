@@ -1,8 +1,10 @@
 import { Question } from './Question'
+import { QuizGame } from './QuizGame'
 
 export class ConsoleUI {
   private input: (callback: (input: string) => void) => void
   private output: (message: string) => void
+  private game: QuizGame
 
   constructor(
     input = (callback: (input: string) => void) => {
@@ -11,10 +13,12 @@ export class ConsoleUI {
         callback(input)
       })
     },
-    output = console.log
+    output = console.log,
+    game: QuizGame
   ) {
     this.input = input
     this.output = output
+    this.game = game
   }
 
   public displayQuestion(question: Question) {
@@ -23,4 +27,9 @@ export class ConsoleUI {
       this.output(`${index + 1}. ${option}`)
     })
   }
+
+  public processAnswer(input: string): void {
+    const isCorrect = this.game.checkAnswer(input)
+    this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
+  }  
 }
