@@ -45,18 +45,22 @@ describe('ConsoleUI - Method Functionality', () => {
   let mockGame: jest.Mocked<QuizGame>
 
   beforeEach(() => {
+    // Spy on console.log for default output testing.
     consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
 
-    // Mock the QuizGame instance.
+    // Mock the QuizGame instance with necessary methods.
     mockGame = {
       checkAnswer: jest.fn(),
       getNextQuestion: jest.fn(),
+      requestHint: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
+    // Instantiate ConsoleUI with the mocked game.
     sut = new ConsoleUI(undefined, undefined, mockGame)
   })
 
   afterEach(() => {
+    // Restore the console spy after each test.
     consoleSpy.mockRestore()
   })
 
@@ -96,29 +100,34 @@ describe('ConsoleUI - Method Functionality', () => {
     mockGame.checkAnswer.mockImplementationOnce(() => {
       throw new Error('Known error')
     })
-  
+
     expect(() => sut.processAnswer('A')).toThrow(ConsoleUIError)
-  
+
     // Case 2: Throw an unknown error.
     mockGame.checkAnswer.mockImplementationOnce(() => {
       throw 'Unknown error'
     })
-  
+
     expect(() => sut.processAnswer('B')).toThrow(ConsoleUIError)
   })
 
   it('should request and display a hint for the current question', () => {
     // Mock the game to return a hint.
     const mockHint = 'This is a hint'
-    mockGame.requestHint = jest.fn().mockReturnValue(mockHint)
-  
-    // Call the new method.
+    mockGame.requestHint.mockReturnValue(mockHint)
+
     sut.requestHint()
-  
-    // Verify interactions.
+
     expect(mockGame.requestHint).toHaveBeenCalled()
     expect(consoleSpy).toHaveBeenCalledWith(`Hint: ${mockHint}`)
   })
-  
-  
+
+  it('should throw a ConsoleUIError for errors during hint requests', () => {
+    // Mock the game to throw an error for hint requests.
+    mockGame.requestHint.mockImplementation(() => {
+      throw new Error('Game error')
+    })
+
+    expect(() => sut.requestHint()).toThrow(ConsoleUIError)
+  })
 })
