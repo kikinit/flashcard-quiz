@@ -106,5 +106,19 @@ describe('ConsoleUI - Method Functionality', () => {
   
     expect(() => sut.processAnswer('B')).toThrow(ConsoleUIError)
   })
+
+  it('should request and display a hint for the current question', () => {
+    // Mock the game to return a hint.
+    const mockHint = 'This is a hint'
+    mockGame.requestHint = jest.fn().mockReturnValue(mockHint)
+  
+    // Call the new method.
+    sut.requestHint()
+  
+    // Verify interactions.
+    expect(mockGame.requestHint).toHaveBeenCalled()
+    expect(consoleSpy).toHaveBeenCalledWith(`Hint: ${mockHint}`)
+  })
+  
   
 })
