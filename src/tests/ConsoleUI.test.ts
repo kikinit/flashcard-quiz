@@ -81,13 +81,13 @@ describe('ConsoleUI - Method Functionality', () => {
     mockGame.checkAnswer.mockReturnValueOnce(true).mockReturnValueOnce(false)
 
     // Simulate correct answer.
-    ui.processAnswer('A')
-    expect(mockGame.checkAnswer).toHaveBeenCalledWith('A')
+    ui.processAnswer('1')
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('1')
     expect(consoleSpy).toHaveBeenCalledWith('Correct!')
 
     // Simulate incorrect answer.
-    ui.processAnswer('B')
-    expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
+    ui.processAnswer('2')
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('2')
     expect(consoleSpy).toHaveBeenCalledWith('Wrong answer!')
   })
 
