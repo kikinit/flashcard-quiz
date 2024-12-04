@@ -1,6 +1,7 @@
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
 import { QuizGame } from '../QuizGame'
+import { ConsoleUIError } from '../errors/ConsoleUIError'
 
 // Note: Direct testing for the default `input` handling (process.stdin) is omitted due to complexity in mocking stdin.
 // The `ConsoleUI` class supports dependency injection for `input`, which is thoroughly tested here.
@@ -88,6 +89,22 @@ describe('ConsoleUI - Method Functionality', () => {
     ui.processAnswer('B')
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
     expect(consoleSpy).toHaveBeenCalledWith('Wrong answer!')
+  })
+
+  it('should throw a ConsoleUIError for any error', () => {
+    // Case 1: Throw a known Error.
+    mockGame.checkAnswer.mockImplementationOnce(() => {
+      throw new Error('Known error')
+    })
+  
+    expect(() => ui.processAnswer('A')).toThrow(ConsoleUIError)
+  
+    // Case 2: Throw an unknown error.
+    mockGame.checkAnswer.mockImplementationOnce(() => {
+      throw 'Unknown error'
+    })
+  
+    expect(() => ui.processAnswer('B')).toThrow(ConsoleUIError)
   })
   
 })
