@@ -1,17 +1,26 @@
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
+import { QuizGame } from '../QuizGame'
 
 // Note: Direct testing for the default `input` handling (process.stdin) is omitted due to complexity in mocking stdin.
 // The `ConsoleUI` class supports dependency injection for `input`, which is thoroughly tested here.
 describe('ConsoleUI - Dependency Injection', () => {
   let mockOutput: jest.Mock
   let mockInput: jest.Mock
+  let mockGame: jest.Mocked<QuizGame>
   let ui: ConsoleUI
 
   beforeEach(() => {
     mockOutput = jest.fn()
     mockInput = jest.fn((callback: (input: string) => void) => callback('mock input'))
-    ui = new ConsoleUI(mockInput, mockOutput)
+
+    // Mock the QuizGame instance.
+    mockGame = {
+      checkAnswer: jest.fn(),
+      getNextQuestion: jest.fn(),
+    } as unknown as jest.Mocked<QuizGame>
+
+    ui = new ConsoleUI(mockInput, mockOutput, mockGame)
   })
 
   it('should call the input function with a callback', () => {
@@ -32,10 +41,18 @@ describe('ConsoleUI - Dependency Injection', () => {
 describe('ConsoleUI - Method Functionality', () => {
   let ui: ConsoleUI
   let consoleSpy: jest.SpyInstance
+  let mockGame: jest.Mocked<QuizGame>
 
   beforeEach(() => {
     consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
-    ui = new ConsoleUI()
+
+    // Mock the QuizGame instance.
+    mockGame = {
+      checkAnswer: jest.fn(),
+      getNextQuestion: jest.fn(),
+    } as unknown as jest.Mocked<QuizGame>
+
+    ui = new ConsoleUI(undefined, undefined, mockGame)
   })
 
   afterEach(() => {
@@ -57,5 +74,20 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(consoleSpy).toHaveBeenCalledWith('2. 4')
     expect(consoleSpy).toHaveBeenCalledWith('3. 5')
   })
-})
 
+  it('should process and validate user answers correctly', () => {
+    // Mock the game responses.
+    mockGame.checkAnswer.mockReturnValueOnce(true).mockReturnValueOnce(false)
+
+    // Simulate correct answer.
+    ui.processAnswer('A')
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('A')
+    expect(consoleSpy).toHaveBeenCalledWith('Correct!')
+
+    // Simulate incorrect answer.
+    ui.processAnswer('B')
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
+    expect(consoleSpy).toHaveBeenCalledWith('Wrong answer!')
+  })
+  
+})
