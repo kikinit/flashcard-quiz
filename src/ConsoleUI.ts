@@ -39,7 +39,12 @@ export class ConsoleUI {
   }
 
   public requestHint(): void {
+    try {
     const hint = this.game.requestHint()
     this.output(`Hint: ${hint}`)
+    } catch {
+      throw new ConsoleUIError()
+    }
   }
+  
 }
