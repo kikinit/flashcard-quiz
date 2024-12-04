@@ -9,7 +9,7 @@ describe('ConsoleUI - Dependency Injection', () => {
   let mockOutput: jest.Mock
   let mockInput: jest.Mock
   let mockGame: jest.Mocked<QuizGame>
-  let ui: ConsoleUI
+  let sut: ConsoleUI
 
   beforeEach(() => {
     mockOutput = jest.fn()
@@ -21,7 +21,7 @@ describe('ConsoleUI - Dependency Injection', () => {
       getNextQuestion: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
-    ui = new ConsoleUI(mockInput, mockOutput, mockGame)
+    sut = new ConsoleUI(mockInput, mockOutput, mockGame)
   })
 
   it('should call the input function with a callback', () => {
@@ -33,14 +33,14 @@ describe('ConsoleUI - Dependency Injection', () => {
   })
 
   it('should use the output function to display a message', () => {
-    ui['output']('Test message')
+    sut['output']('Test message')
 
     expect(mockOutput).toHaveBeenCalledWith('Test message')
   })
 })
 
 describe('ConsoleUI - Method Functionality', () => {
-  let ui: ConsoleUI
+  let sut: ConsoleUI
   let consoleSpy: jest.SpyInstance
   let mockGame: jest.Mocked<QuizGame>
 
@@ -53,7 +53,7 @@ describe('ConsoleUI - Method Functionality', () => {
       getNextQuestion: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
-    ui = new ConsoleUI(undefined, undefined, mockGame)
+    sut = new ConsoleUI(undefined, undefined, mockGame)
   })
 
   afterEach(() => {
@@ -68,7 +68,7 @@ describe('ConsoleUI - Method Functionality', () => {
       ['It is the square root of 16', 'It is not a prime number', 'It is greater than 3', 'It is even']
     )
 
-    ui.displayQuestion(question)
+    sut.displayQuestion(question)
 
     expect(consoleSpy).toHaveBeenCalledWith('What is 2 + 2?')
     expect(consoleSpy).toHaveBeenCalledWith('1. 3')
@@ -81,12 +81,12 @@ describe('ConsoleUI - Method Functionality', () => {
     mockGame.checkAnswer.mockReturnValueOnce(true).mockReturnValueOnce(false)
 
     // Simulate correct answer.
-    ui.processAnswer('1')
+    sut.processAnswer('1')
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('1')
     expect(consoleSpy).toHaveBeenCalledWith('Correct!')
 
     // Simulate incorrect answer.
-    ui.processAnswer('2')
+    sut.processAnswer('2')
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('2')
     expect(consoleSpy).toHaveBeenCalledWith('Wrong answer!')
   })
@@ -97,14 +97,14 @@ describe('ConsoleUI - Method Functionality', () => {
       throw new Error('Known error')
     })
   
-    expect(() => ui.processAnswer('A')).toThrow(ConsoleUIError)
+    expect(() => sut.processAnswer('A')).toThrow(ConsoleUIError)
   
     // Case 2: Throw an unknown error.
     mockGame.checkAnswer.mockImplementationOnce(() => {
       throw 'Unknown error'
     })
   
-    expect(() => ui.processAnswer('B')).toThrow(ConsoleUIError)
+    expect(() => sut.processAnswer('B')).toThrow(ConsoleUIError)
   })
   
 })
