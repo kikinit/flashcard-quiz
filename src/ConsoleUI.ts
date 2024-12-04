@@ -1,5 +1,6 @@
 import { Question } from './Question'
 import { QuizGame } from './QuizGame'
+import { ConsoleUIError } from './errors'
 
 export class ConsoleUI {
   private input: (callback: (input: string) => void) => void
@@ -29,7 +30,11 @@ export class ConsoleUI {
   }
 
   public processAnswer(input: string): void {
-    const isCorrect = this.game.checkAnswer(input)
-    this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
+    try {
+      const isCorrect = this.game.checkAnswer(input)
+      this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
+    } catch {
+      throw new ConsoleUIError()
+    }
   }  
 }
