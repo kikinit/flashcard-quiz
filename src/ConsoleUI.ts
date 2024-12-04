@@ -42,5 +42,4 @@ export class ConsoleUI {
     const hint = this.game.requestHint()
     this.output(`Hint: ${hint}`)
   }
-  
 }
