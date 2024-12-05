@@ -46,18 +46,15 @@ export class ConsoleUI {
     })
   }
 
-  public processAnswer(input: string): void {
-    this.handleErrors(() => {
-      const isCorrect = this.game.checkAnswer(input)
-      this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
-    })
-  }
-
   public requestHint(): void {
     this.handleErrors(() => {
       const hint = this.game.requestHint()
       this.output(`Hint: ${hint}`)
     })
+  }
+
+  public showAnswerFeedback(isCorrect: boolean): void {
+    this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
   }
 
   public restartGame(): void {
