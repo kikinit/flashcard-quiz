@@ -13,4 +13,9 @@ export class QuizController {
   public start(): void {
     this.ui.start()
   }
+
+  public handleAnswer(input: string): boolean {
+    const isCorrect = this.game.checkAnswer(input)
+    return isCorrect
+  }  
 }
