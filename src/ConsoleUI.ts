@@ -46,5 +46,13 @@ export class ConsoleUI {
       throw new ConsoleUIError()
     }
   }
-  
+
+  private handleErrors(fn: () => void): void {
+    try {
+      fn()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : undefined
+      throw new ConsoleUIError(message)
+    }
+  }  
 }
