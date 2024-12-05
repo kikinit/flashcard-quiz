@@ -29,6 +29,8 @@ export class ConsoleUI {
     this.input((userInput) => {
       if (userInput === 's') {
         this.game.getNextQuestion()
+      } else if (userInput === 'q') {
+        this.output('Goodbye!')
       }
     })
   }
