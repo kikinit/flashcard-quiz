@@ -65,7 +65,7 @@ describe('ConsoleUI - Method Functionality', () => {
     sut.start()
 
     expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
-    expect(mockOutput).toHaveBeenCalledWith('Type "start" to begin or "exit" to quit.')
+    expect(mockOutput).toHaveBeenCalledWith('Type "s" to begin or "q" to quit.')
   })
 
   it('should display a question using default output in displayQuestion method', () => {

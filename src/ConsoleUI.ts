@@ -24,7 +24,7 @@ export class ConsoleUI {
   
   public start(): void {
     this.output('Welcome to the Quiz Game!')
-    this.output('Type "start" to begin or "exit" to quit.')
+    this.output('Type "s" to begin or "q" to quit.')
   }
 
   public displayQuestion(question: Question) {
