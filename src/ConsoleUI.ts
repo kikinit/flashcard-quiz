@@ -54,7 +54,9 @@ export class ConsoleUI {
   }
 
   public showAnswerFeedback(isCorrect: boolean): void {
-    this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
+    this.handleErrors(() => {
+      this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
+    })
   }
 
   public restartGame(): void {
