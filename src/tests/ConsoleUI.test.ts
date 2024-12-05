@@ -130,4 +130,22 @@ describe('ConsoleUI - Method Functionality', () => {
 
     expect(() => sut.requestHint()).toThrow(ConsoleUIError)
   })
+
+  it('should wrap errors in a ConsoleUIError', () => {
+    const mockFn = jest.fn(() => {
+      throw new Error('Original error message')
+    })
+
+    expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
+    expect(() => sut['handleErrors'](mockFn)).toThrow('Original error message')
+  })
+
+  it('should handle unknown errors gracefully', () => {
+    const mockFn = jest.fn(() => {
+      throw 'Unknown error'
+    })
+
+    expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
+    expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred while processing the answer')
+  })
 })
