@@ -61,6 +61,13 @@ describe('ConsoleUI - Method Functionality', () => {
     sut = new ConsoleUI(mockGame, mockInput, mockOutput)
   })
 
+  it('should display a welcome message when started', () => {
+    sut.start()
+
+    expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
+    expect(mockOutput).toHaveBeenCalledWith('Type "start" to begin or "exit" to quit.')
+  })
+
   it('should display a question using default output in displayQuestion method', () => {
     const question = new Question(
       'What is 2 + 2?',
