@@ -100,6 +100,23 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(mockOutput).toHaveBeenCalledWith('Wrong answer!')
   })
 
+  it('should throw a ConsoleUIError for any error in showAnswerFeedback method', () => {
+    // Mock the `output` method to throw an error.
+    mockOutput.mockImplementationOnce(() => {
+      throw new Error('Output error')
+    })
+  
+    // Verify that a ConsoleUIError is thrown when an error occurs.
+    expect(() => sut.showAnswerFeedback(true)).toThrow(ConsoleUIError)
+  
+    // Case 2: Simulate an unknown error.
+    mockOutput.mockImplementationOnce(() => {
+      throw 'Unknown error'
+    })
+  
+    expect(() => sut.showAnswerFeedback(false)).toThrow(ConsoleUIError)
+  })  
+
   it('should request and display a hint for the current question in requestHint method', () => {
     // Mock the game to return a hint.
     const mockHint = 'This is a hint'
