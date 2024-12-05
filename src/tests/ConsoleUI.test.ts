@@ -40,14 +40,12 @@ describe('ConsoleUI - Dependency Injection', () => {
 })
 
 describe('ConsoleUI - Method Functionality', () => {
+  let mockInput: jest.Mock
+  let mockOutput: jest.Mock
   let sut: ConsoleUI
-  let consoleSpy: jest.SpyInstance
   let mockGame: jest.Mocked<QuizGame>
 
   beforeEach(() => {
-    // Spy on console.log for default output testing.
-    consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
-
     // Mock the QuizGame instance with necessary methods.
     mockGame = {
       checkAnswer: jest.fn(),
@@ -56,13 +54,11 @@ describe('ConsoleUI - Method Functionality', () => {
       restart: jest.fn()
     } as unknown as jest.Mocked<QuizGame>
 
-    // Instantiate ConsoleUI with the mocked game.
-    sut = new ConsoleUI(mockGame)
-  })
+    mockInput = jest.fn()
+    mockOutput = jest.fn()
 
-  afterEach(() => {
-    // Restore the console spy after each test.
-    consoleSpy.mockRestore()
+    // Instantiate ConsoleUI with the mocked game.
+    sut = new ConsoleUI(mockGame, mockInput, mockOutput)
   })
 
   it('should display a question using default output in displayQuestion method', () => {
@@ -75,10 +71,10 @@ describe('ConsoleUI - Method Functionality', () => {
 
     sut.displayQuestion(question)
 
-    expect(consoleSpy).toHaveBeenCalledWith('What is 2 + 2?')
-    expect(consoleSpy).toHaveBeenCalledWith('1. 3')
-    expect(consoleSpy).toHaveBeenCalledWith('2. 4')
-    expect(consoleSpy).toHaveBeenCalledWith('3. 5')
+    expect(mockOutput).toHaveBeenCalledWith('What is 2 + 2?')
+    expect(mockOutput).toHaveBeenCalledWith('1. 3')
+    expect(mockOutput).toHaveBeenCalledWith('2. 4')
+    expect(mockOutput).toHaveBeenCalledWith('3. 5')
   })
 
   it('throws a ConsoleUIError for any error in displayQuestion method', () => {
@@ -99,12 +95,12 @@ describe('ConsoleUI - Method Functionality', () => {
     // Simulate correct answer.
     sut.processAnswer('1')
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('1')
-    expect(consoleSpy).toHaveBeenCalledWith('Correct!')
+    expect(mockOutput).toHaveBeenCalledWith('Correct!')
 
     // Simulate incorrect answer.
     sut.processAnswer('2')
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('2')
-    expect(consoleSpy).toHaveBeenCalledWith('Wrong answer!')
+    expect(mockOutput).toHaveBeenCalledWith('Wrong answer!')
   })
 
   it('should throw a ConsoleUIError for any error in processAnswer method', () => {
@@ -131,7 +127,7 @@ describe('ConsoleUI - Method Functionality', () => {
     sut.requestHint()
 
     expect(mockGame.requestHint).toHaveBeenCalled()
-    expect(consoleSpy).toHaveBeenCalledWith(`Hint: ${mockHint}`)
+    expect(mockOutput).toHaveBeenCalledWith(`Hint: ${mockHint}`)
   })
 
   it('should throw a ConsoleUIError for errors in requestHint method', () => {
@@ -165,7 +161,7 @@ describe('ConsoleUI - Method Functionality', () => {
     sut.restartGame()
   
     expect(mockGame.restart).toHaveBeenCalled()
-    expect(consoleSpy).toHaveBeenCalledWith('Game has been restarted. You can start again!')
+    expect(mockOutput).toHaveBeenCalledWith('Game has been restarted. You can start again!')
   })
 
   it('should throw a ConsoleUIError for any error in restartGame method', () => {
