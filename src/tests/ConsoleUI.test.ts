@@ -12,15 +12,17 @@ describe('ConsoleUI - Dependency Injection', () => {
   let sut: ConsoleUI
 
   beforeEach(() => {
-    mockOutput = jest.fn()
-    mockInput = jest.fn((callback: (input: string) => void) => callback('mock input'))
-
     // Mock the QuizGame instance.
     mockGame = {
       checkAnswer: jest.fn(),
       getNextQuestion: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
+    // Mock the input and output streams.
+    mockOutput = jest.fn()
+    mockInput = jest.fn((callback: (input: string) => void) => callback('mock input'))
+
+    // Instantiate ConsoleUI with the mocked game and I/O.
     sut = new ConsoleUI(mockGame, mockInput, mockOutput)
   })
 
@@ -54,55 +56,11 @@ describe('ConsoleUI - Method Functionality', () => {
       restart: jest.fn()
     } as unknown as jest.Mocked<QuizGame>
 
-    mockInput = jest.fn()
+    // Mock the output stream.
     mockOutput = jest.fn()
 
-    // Instantiate ConsoleUI with the mocked game.
+    // Instantiate ConsoleUI with the mocked game and I/O.
     sut = new ConsoleUI(mockGame, mockInput, mockOutput)
-  })
-
-  it('should display a welcome message when started', () => {
-    sut.start()
-
-    expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
-    expect(mockOutput).toHaveBeenCalledWith('Type "s" to start or "q" to quit.')
-  })
-
-  it('should process user input for the "start" command', () => {
-    const localMockInput = jest.fn((callback: (input: string) => void) => {
-      callback('s') // Simulate "start" command.
-    })
-    const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
-
-    localSut.start()
-
-    expect(mockGame.getNextQuestion).toHaveBeenCalled()
-  })
-
-  it('should process user input for the "exit" command', () => {
-    const localMockInput = jest.fn((callback: (input: string) => void) => {
-      callback('q') // Simulate "exit" command.
-    })
-    const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
-
-    localSut.start()
-
-    expect(mockOutput).toHaveBeenCalledWith('Goodbye!')
-    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
-  })
-
-  it('should display an error message for unknown commands', () => {
-    const localMockInput = jest.fn((callback: (input: string) => void) => {
-      callback('invalid') // Simulate an invalid command.
-    })
-    const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
-  
-    localSut.start()
-  
-    // Verify the unknown command message is outputted.
-    expect(mockOutput).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
-    // Ensure no interaction with the game for invalid input.
-    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
   })
   
   it('should display a question using default output in displayQuestion method', () => {
@@ -201,7 +159,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred while processing the answer')
   })
 
-  it('restarts the game and displays a confirmation message', () => {
+  it('restarts the game and displays a confirmation message in restartGame method', () => {
     sut.restartGame()
   
     expect(mockGame.restart).toHaveBeenCalled()
@@ -216,3 +174,59 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.restartGame()).toThrow(ConsoleUIError)
   })
 })
+
+describe('ConsoleUI - User Input Method Functionality', () => {
+  let mockInput: jest.Mock
+  let mockOutput: jest.Mock
+  let mockGame: jest.Mocked<QuizGame>
+  let sut: ConsoleUI
+  let inputValue: string
+
+  beforeEach(() => {
+    // Mock the QuizGame instance with necessary methods.
+    mockGame = {
+      checkAnswer: jest.fn(),
+      getNextQuestion: jest.fn(),
+      requestHint: jest.fn(),
+      restart: jest.fn(),
+    } as unknown as jest.Mocked<QuizGame>
+
+    // Mock the input and output streams.
+    mockInput = jest.fn((callback: (input: string) => void) => callback(inputValue))
+    mockOutput = jest.fn()
+
+    // Instantiate ConsoleUI with the mocked game and I/O.
+    sut = new ConsoleUI(mockGame, mockInput, mockOutput)
+  })
+
+  it('should display a welcome message when star', () => {
+    sut.start()
+
+    expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
+    expect(mockOutput).toHaveBeenCalledWith('Type "s" to start or "q" to quit.')
+  })
+
+  it('should process user input for the "s" command in start method', () => {
+    inputValue = 's' // Simulate "start" command.
+    sut.start()
+
+    expect(mockGame.getNextQuestion).toHaveBeenCalled()
+  })
+
+  it('should process user input for the "q" command in start method', () => {
+    inputValue = 'q' // Simulate "exit" command.
+    sut.start()
+
+    expect(mockOutput).toHaveBeenCalledWith('Goodbye!')
+    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
+  })
+
+  it('should display an error message for unknown commands in start method', () => {
+    inputValue = 'invalid' // Simulate an invalid command.
+    sut.start()
+
+    expect(mockOutput).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
+    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
+  })
+})
+
