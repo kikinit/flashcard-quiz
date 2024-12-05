@@ -8,9 +8,12 @@ describe('QuizController', () => {
   let sut: QuizController
 
   beforeEach(() => {
-    // Mock dependencies.
+    // Mock QuizGame instance with necessary methods.
     mockGame = {
-      start: jest.fn(),
+      checkAnswer: jest.fn(),
+      getNextQuestion: jest.fn(),
+      requestHint: jest.fn(),
+      restart: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
     mockUI = {
@@ -31,4 +34,20 @@ describe('QuizController', () => {
     sut.start()
     expect(mockUI.start).toHaveBeenCalled()
   })
+
+  it('should return true for a correct answer', () => {
+    mockGame.checkAnswer.mockReturnValueOnce(true)
+  
+    const result = sut.handleAnswer('A')
+    expect(result).toBe(true)
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('A')
+  })
+  
+  it('should return false for an incorrect answer', () => {
+    mockGame.checkAnswer.mockReturnValueOnce(false)
+  
+    const result = sut.handleAnswer('B')
+    expect(result).toBe(false)
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
+  })  
 })
