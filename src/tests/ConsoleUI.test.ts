@@ -64,7 +64,7 @@ describe('ConsoleUI - Method Functionality', () => {
     consoleSpy.mockRestore()
   })
 
-  it('should display a question using default output', () => {
+  it('should display a question using default output in displayQuestion method', () => {
     const question = new Question(
       'What is 2 + 2?',
       ['3', '4', '5'],
@@ -80,7 +80,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(consoleSpy).toHaveBeenCalledWith('3. 5')
   })
 
-  it('should process and validate user answers correctly', () => {
+  it('should process and validate user answers correctly in processAnswer method', () => {
     // Mock the game responses.
     mockGame.checkAnswer.mockReturnValueOnce(true).mockReturnValueOnce(false)
 
@@ -95,7 +95,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(consoleSpy).toHaveBeenCalledWith('Wrong answer!')
   })
 
-  it('should throw a ConsoleUIError for any error', () => {
+  it('should throw a ConsoleUIError for any error in processAnswer method', () => {
     // Case 1: Throw a known Error.
     mockGame.checkAnswer.mockImplementationOnce(() => {
       throw new Error('Known error')
@@ -111,7 +111,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.processAnswer('B')).toThrow(ConsoleUIError)
   })
 
-  it('should request and display a hint for the current question', () => {
+  it('should request and display a hint for the current question in requestHint method', () => {
     // Mock the game to return a hint.
     const mockHint = 'This is a hint'
     mockGame.requestHint.mockReturnValue(mockHint)
@@ -122,7 +122,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(consoleSpy).toHaveBeenCalledWith(`Hint: ${mockHint}`)
   })
 
-  it('should throw a ConsoleUIError for errors during hint requests', () => {
+  it('should throw a ConsoleUIError for errors in requestHint method', () => {
     // Mock the game to throw an error for hint requests.
     mockGame.requestHint.mockImplementation(() => {
       throw new Error('Game error')
@@ -131,7 +131,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.requestHint()).toThrow(ConsoleUIError)
   })
 
-  it('should wrap errors in a ConsoleUIError', () => {
+  it('should wrap errors in a ConsoleUIError using handleErrors template method', () => {
     const mockFn = jest.fn(() => {
       throw new Error('Original error message')
     })
@@ -140,7 +140,7 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut['handleErrors'](mockFn)).toThrow('Original error message')
   })
 
-  it('should handle unknown errors gracefully', () => {
+  it('should handle unknown errors gracefully using handleErrors template method', () => {
     const mockFn = jest.fn(() => {
       throw 'Unknown error'
     })
