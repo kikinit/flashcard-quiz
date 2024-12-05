@@ -9,4 +9,8 @@ export class QuizController {
     this.game = game
     this.ui = ui
   }
+
+  public start(): void {
+    this.ui.start()
+  }
 }
