@@ -22,6 +22,10 @@ export class ConsoleUI {
     this.output = output
   }
   
+  public start(): void {
+    this.output('Welcome to the Quiz Game!')
+    this.output('Type "start" to begin or "exit" to quit.')
+  }
 
   public displayQuestion(question: Question) {
     this.handleErrors(() => {
