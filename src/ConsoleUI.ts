@@ -31,6 +31,8 @@ export class ConsoleUI {
         this.game.getNextQuestion()
       } else if (userInput === 'q') {
         this.output('Goodbye!')
+      } else {
+        this.output('Unknown command. Type "s" to play or "q" to quit.')
       }
     })
   }
