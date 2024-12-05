@@ -21,7 +21,7 @@ describe('ConsoleUI - Dependency Injection', () => {
       getNextQuestion: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
-    sut = new ConsoleUI(mockInput, mockOutput, mockGame)
+    sut = new ConsoleUI(mockGame, mockInput, mockOutput)
   })
 
   it('should call the input function with a callback', () => {
@@ -56,7 +56,7 @@ describe('ConsoleUI - Method Functionality', () => {
     } as unknown as jest.Mocked<QuizGame>
 
     // Instantiate ConsoleUI with the mocked game.
-    sut = new ConsoleUI(undefined, undefined, mockGame)
+    sut = new ConsoleUI(mockGame)
   })
 
   afterEach(() => {

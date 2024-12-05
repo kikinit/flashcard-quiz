@@ -3,24 +3,25 @@ import { QuizGame } from './QuizGame'
 import { ConsoleUIError } from './errors'
 
 export class ConsoleUI {
+  private game: QuizGame
   private input: (callback: (input: string) => void) => void
   private output: (message: string) => void
-  private game: QuizGame
 
   constructor(
+    game: QuizGame,
     input = (callback: (input: string) => void) => {
       process.stdin.on('data', (chunk: Buffer | string) => {
         const input = chunk.toString().trim()
         callback(input)
       })
     },
-    output = console.log,
-    game: QuizGame
+    output = console.log
   ) {
+    this.game = game
     this.input = input
     this.output = output
-    this.game = game
   }
+  
 
   public displayQuestion(question: Question) {
     this.handleErrors(() => {
