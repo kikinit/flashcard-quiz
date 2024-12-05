@@ -79,6 +79,18 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(mockGame.getNextQuestion).toHaveBeenCalled()
   })
 
+  it('should process user input for the "exit" command', () => {
+    const localMockInput = jest.fn((callback: (input: string) => void) => {
+      callback('q')
+    })
+    const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
+
+    localSut.start()
+
+    expect(mockOutput).toHaveBeenCalledWith('Goodbye!')
+    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
+  })
+
   it('should display a question using default output in displayQuestion method', () => {
     const question = new Question(
       'What is 2 + 2?',
