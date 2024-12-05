@@ -81,7 +81,7 @@ describe('ConsoleUI - Method Functionality', () => {
 
   it('should process user input for the "exit" command', () => {
     const localMockInput = jest.fn((callback: (input: string) => void) => {
-      callback('q')
+      callback('q') // Simulate "exit" command.
     })
     const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
 
@@ -91,6 +91,20 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
   })
 
+  it('should display an error message for unknown commands', () => {
+    const localMockInput = jest.fn((callback: (input: string) => void) => {
+      callback('invalid') // Simulate an invalid command.
+    })
+    const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
+  
+    localSut.start()
+  
+    // Verify the unknown command message is outputted.
+    expect(mockOutput).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
+    // Ensure no interaction with the game for invalid input.
+    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
+  })
+  
   it('should display a question using default output in displayQuestion method', () => {
     const question = new Question(
       'What is 2 + 2?',
