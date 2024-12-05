@@ -90,35 +90,14 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.displayQuestion(mockQuestion)).toThrow(ConsoleUIError)
   })
 
-  it('should process and validate user answers correctly in processAnswer method', () => {
-    // Mock the game responses.
-    mockGame.checkAnswer.mockReturnValueOnce(true).mockReturnValueOnce(false)
-
-    // Simulate correct answer.
-    sut.processAnswer('1')
-    expect(mockGame.checkAnswer).toHaveBeenCalledWith('1')
+  it('should display correct outout for a correct answer in showAnswerFeedback method', () => {
+    sut.showAnswerFeedback(true)
     expect(mockOutput).toHaveBeenCalledWith('Correct!')
-
-    // Simulate incorrect answer.
-    sut.processAnswer('2')
-    expect(mockGame.checkAnswer).toHaveBeenCalledWith('2')
-    expect(mockOutput).toHaveBeenCalledWith('Wrong answer!')
   })
-
-  it('should throw a ConsoleUIError for any error in processAnswer method', () => {
-    // Case 1: Throw a known Error.
-    mockGame.checkAnswer.mockImplementationOnce(() => {
-      throw new Error('Known error')
-    })
-
-    expect(() => sut.processAnswer('A')).toThrow(ConsoleUIError)
-
-    // Case 2: Throw an unknown error.
-    mockGame.checkAnswer.mockImplementationOnce(() => {
-      throw 'Unknown error'
-    })
-
-    expect(() => sut.processAnswer('B')).toThrow(ConsoleUIError)
+  
+  it('should display correct output for an incorrect answer in showAnswerFeedback method', () => {
+    sut.showAnswerFeedback(false)
+    expect(mockOutput).toHaveBeenCalledWith('Wrong answer!')
   })
 
   it('should request and display a hint for the current question in requestHint method', () => {
