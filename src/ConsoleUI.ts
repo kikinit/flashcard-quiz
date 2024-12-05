@@ -23,28 +23,26 @@ export class ConsoleUI {
   }
 
   public displayQuestion(question: Question) {
-    this.output(question.getText())
-    question.getOptions().forEach((option, index) => {
-      this.output(`${index + 1}. ${option}`)
+    this.handleErrors(() => {
+      this.output(question.getText())
+      question.getOptions().forEach((option, index) => {
+        this.output(`${index + 1}. ${option}`)
+      })
     })
   }
 
   public processAnswer(input: string): void {
-    try {
+    this.handleErrors(() => {
       const isCorrect = this.game.checkAnswer(input)
       this.output(isCorrect ? 'Correct!' : 'Wrong answer!')
-    } catch {
-      throw new ConsoleUIError()
-    }
+    })
   }
 
   public requestHint(): void {
-    try {
-    const hint = this.game.requestHint()
-    this.output(`Hint: ${hint}`)
-    } catch {
-      throw new ConsoleUIError()
-    }
+    this.handleErrors(() => {
+      const hint = this.game.requestHint()
+      this.output(`Hint: ${hint}`)
+    })
   }
 
   private handleErrors(fn: () => void): void {
