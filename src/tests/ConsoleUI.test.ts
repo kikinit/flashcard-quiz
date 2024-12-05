@@ -53,6 +53,7 @@ describe('ConsoleUI - Method Functionality', () => {
       checkAnswer: jest.fn(),
       getNextQuestion: jest.fn(),
       requestHint: jest.fn(),
+      restart: jest.fn()
     } as unknown as jest.Mocked<QuizGame>
 
     // Instantiate ConsoleUI with the mocked game.
@@ -159,4 +160,11 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
     expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred while processing the answer')
   })
+
+  it('restarts the game and displays a confirmation message', () => {
+    sut.restartGame()
+  
+    expect(mockGame.restart).toHaveBeenCalled()
+    expect(consoleSpy).toHaveBeenCalledWith('Game has been restarted. You can start again!')
+  })  
 })
