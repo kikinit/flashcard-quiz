@@ -24,7 +24,13 @@ export class ConsoleUI {
   
   public start(): void {
     this.output('Welcome to the Quiz Game!')
-    this.output('Type "s" to begin or "q" to quit.')
+    this.output('Type "s" to start or "q" to quit.')
+
+    this.input((userInput) => {
+      if (userInput === 's') {
+        this.game.getNextQuestion()
+      }
+    })
   }
 
   public displayQuestion(question: Question) {
