@@ -80,6 +80,17 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(consoleSpy).toHaveBeenCalledWith('3. 5')
   })
 
+  it('throws a ConsoleUIError for any error in displayQuestion method', () => {
+    const mockQuestion = {
+      getText: jest.fn(() => {
+        throw new Error('Text error')
+      }),
+      getOptions: jest.fn(),
+    } as unknown as Question
+  
+    expect(() => sut.displayQuestion(mockQuestion)).toThrow(ConsoleUIError)
+  })
+
   it('should process and validate user answers correctly in processAnswer method', () => {
     // Mock the game responses.
     mockGame.checkAnswer.mockReturnValueOnce(true).mockReturnValueOnce(false)
