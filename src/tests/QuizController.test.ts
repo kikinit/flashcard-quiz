@@ -26,4 +26,9 @@ describe('QuizController', () => {
     expect(sut['game']).toBe(mockGame)
     expect(sut['ui']).toBe(mockUI)
   })
+
+  it('should invoke the start method in ConsoleUI in start method in QuizController', () => {
+    sut.start()
+    expect(mockUI.start).toHaveBeenCalled()
+  })
 })
