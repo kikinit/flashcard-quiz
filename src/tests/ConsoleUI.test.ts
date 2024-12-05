@@ -65,7 +65,18 @@ describe('ConsoleUI - Method Functionality', () => {
     sut.start()
 
     expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
-    expect(mockOutput).toHaveBeenCalledWith('Type "s" to begin or "q" to quit.')
+    expect(mockOutput).toHaveBeenCalledWith('Type "s" to start or "q" to quit.')
+  })
+
+  it('should process user input for the "start" command', () => {
+    const localMockInput = jest.fn((callback: (input: string) => void) => {
+      callback('s') // Simulate "start" command.
+    })
+    const localSut = new ConsoleUI(mockGame, localMockInput, mockOutput)
+
+    localSut.start()
+
+    expect(mockGame.getNextQuestion).toHaveBeenCalled()
   })
 
   it('should display a question using default output in displayQuestion method', () => {
