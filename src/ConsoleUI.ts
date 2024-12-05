@@ -46,6 +46,11 @@ export class ConsoleUI {
     })
   }
 
+  public restartGame(): void {
+    this.game.restart()
+    this.output('Game has been restarted. You can start again!')
+  }
+
   private handleErrors(fn: () => void): void {
     try {
       fn()
@@ -53,5 +58,5 @@ export class ConsoleUI {
       const message = error instanceof Error ? error.message : undefined
       throw new ConsoleUIError(message)
     }
-  }  
+  }
 }
