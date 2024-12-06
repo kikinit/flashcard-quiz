@@ -2,6 +2,7 @@ import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
 import { QuizGame } from '../QuizGame'
 import { ConsoleUIError } from '../errors/ConsoleUIError'
+import { StartCommand } from '../StartCommand'
 
 // Note: Direct testing for the default `input` handling (process.stdin) is omitted due to complexity in mocking stdin.
 // The `ConsoleUI` class supports dependency injection for `input`, which is thoroughly tested here.
@@ -195,7 +196,7 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     sut = new ConsoleUI(mockGame, mockInput, mockOutput)
   })
 
-  it('should display a welcome message when star', () => {
+  it('should display a welcome message when start method is called', () => {
     sut.start()
 
     expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
@@ -204,9 +205,9 @@ describe('ConsoleUI - User Input Method Functionality', () => {
 
   it('should process user input for the "s" command in start method', () => {
     inputValue = 's' // Simulate "start" command.
-    sut.start()
-
-    expect(mockGame.getNextQuestion).toHaveBeenCalled()
+    const result = sut.start()
+  
+    expect(result).toBe(StartCommand.START)
   })
 
   it('should process user input for the "q" command in start method', () => {

@@ -1,5 +1,6 @@
 import { Question } from './Question'
 import { QuizGame } from './QuizGame'
+import { StartCommand } from './StartCommand'
 import { ConsoleUIError } from './errors'
 
 export class ConsoleUI {
@@ -22,19 +23,23 @@ export class ConsoleUI {
     this.output = output
   }
   
-  public start(): void {
+  public start(): StartCommand {
     this.output('Welcome to the Quiz Game!')
     this.output('Type "s" to start or "q" to quit.')
 
+    let command: StartCommand = StartCommand.UNKNOWN
+
     this.input((userInput) => {
       if (userInput === 's') {
-        this.game.getNextQuestion()
+        command = StartCommand.START
       } else if (userInput === 'q') {
         this.output('Goodbye!')
+        command = StartCommand.EXIT
       } else {
         this.output('Unknown command. Type "s" to play or "q" to quit.')
       }
     })
+    return command
   }
 
   public displayQuestion(question: Question) {
