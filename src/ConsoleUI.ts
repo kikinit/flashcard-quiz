@@ -65,6 +65,8 @@ export class ConsoleUI {
     switch (userInput) {
       case 'h':
         return UserAction.REQUEST_HINT
+      case 'n':
+        return UserAction.NEXT_QUESTION
       default:
         return UserAction.UNKNOWN
     }
