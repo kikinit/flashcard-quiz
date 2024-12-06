@@ -17,10 +17,15 @@ export class QuizController {
   public startGame(): void {
     const nextQuestion = this.game.getNextQuestion()
     this.ui.displayQuestion(nextQuestion)
-  }  
+  }
 
+  public showNextQuestion(): void {
+    const nextQuestion = this.game.getNextQuestion()
+    this.ui.displayQuestion(nextQuestion)
+  }
+ 
   public handleAnswer(input: string): boolean {
     const isCorrect = this.game.checkAnswer(input)
     return isCorrect
-  }  
+  }
 }
