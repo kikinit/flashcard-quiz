@@ -71,6 +71,12 @@ export class ConsoleUI {
     })
   }
 
+  public displayError(message: string): void {
+    this.handleErrors(() => {
+      this.output(message)
+    })
+  }
+  
   private handleErrors(fn: () => void): void {
     try {
       fn()
