@@ -29,6 +29,8 @@ export class QuizController {
       this.requestHint()
     } else if (input.toLowerCase() === 'n') {
       this.showNextQuestion()
+    } else if (!isNaN(parseInt(input))) {
+      this.handleAnswer(input)
     } else {
       this.ui.displayError('Unknown command')
     }
