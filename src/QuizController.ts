@@ -27,6 +27,8 @@ export class QuizController {
   public handleUserAction(input: string): void {
     if (input.toLowerCase() === 'h') {
       this.requestHint()
+    } else {
+      this.ui.displayError('Unknown command')
     }
   }
   
