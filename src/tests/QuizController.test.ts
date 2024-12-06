@@ -78,6 +78,14 @@ describe('QuizController', () => {
     expect(mockUI.displayError).not.toHaveBeenCalled()
   })
 
+  it('should display a goodbye message and stop the game when command is StartCommand.EXIT in handleStartCommand method', () => {
+    const result = sut.handleStartCommand(StartCommand.EXIT)
+
+    expect(result).toBe(false)
+    expect(mockUI.displayMessage).toHaveBeenCalledWith('Goodbye!')
+    expect(mockUI.displayError).not.toHaveBeenCalled()
+})
+
   it('should handle REQUEST_HINT action', () => {
     sut.handleUserAction(UserAction.REQUEST_HINT)
 
