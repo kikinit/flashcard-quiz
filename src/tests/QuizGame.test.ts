@@ -89,7 +89,7 @@ describe('QuizGame', () => {
 
     // Inject the mocked factory.
     questionBank = new QuestionBank(factory)
-    sut = new QuizGame(questionBank, factory, scoreboard)
+    sut = new QuizGame(questionBank, scoreboard)
 
     // Add questions to the bank.
     questionBank.addQuestion(
@@ -185,20 +185,22 @@ describe('QuizGame', () => {
     expect(() => sut.requestHint()).toThrow(MaxHintsLimitError)
   })
 
-  it('should delegate question creation to the factory', () => {
-    sut.addQuestion(
-      questionC.text,
-      questionC.options,
-      questionC.correctAnswer,
-      questionC.hints
-    )
-  
-    expect(factory.createQuestion).toHaveBeenCalledWith(
-      questionC.text,
-      questionC.options,
-      questionC.correctAnswer,
-      questionC.hints
+  it('should delegate question creation to the factory in addQuestion method', () => {
+    const spyAddQuestion = jest.spyOn(questionBank, 'addQuestion')
+    const questionData = {
+        text: questionC.text,
+        options: questionC.options,
+        correctAnswer: questionC.correctAnswer,
+        hints: questionC.hints
+    }
+
+    sut.addQuestion(questionData)
+
+    expect(spyAddQuestion).toHaveBeenCalledWith(
+        questionC.text,
+        questionC.options,
+        questionC.correctAnswer,
+        questionC.hints
     )
   })
-  
 })
