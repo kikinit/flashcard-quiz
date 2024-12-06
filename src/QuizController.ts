@@ -43,6 +43,9 @@ export class QuizController {
       return fn()
     } catch (error) {
       const message = error instanceof Error ? error.message : undefined
+
+      this.ui.displayError(message || 'An unexpected error occurred')
+
       throw new QuizControllerError(message)
     }
   }  
