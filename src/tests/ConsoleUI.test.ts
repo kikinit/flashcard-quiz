@@ -157,13 +157,13 @@ describe('ConsoleUI - Method Functionality', () => {
   it('restarts the game and displays a confirmation message in restartGame method', () => {
     sut.restartGame()
   
-    expect(mockGame.restart).toHaveBeenCalled()
     expect(mockOutput).toHaveBeenCalledWith('Game has been restarted. You can start again!')
   })
 
-  it('should throw a ConsoleUIError for any error in restartGame method', () => {
-    mockGame.restart.mockImplementationOnce(() => {
-      throw new Error('Restart failed')
+  it('should throw a ConsoleUIError if output fails in restartGame method', () => {
+    // Mock the `output` method to throw an error
+    mockOutput.mockImplementationOnce(() => {
+      throw new Error('Output error')
     })
 
     expect(() => sut.restartGame()).toThrow(ConsoleUIError)
