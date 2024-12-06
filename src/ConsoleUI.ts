@@ -51,12 +51,12 @@ export class ConsoleUI {
     })
   }
 
-  public requestHint(): void {
+  public displayHint(message: string): void {
     this.handleErrors(() => {
-      const hint = this.game.requestHint()
-      this.output(`Hint: ${hint}`)
+      this.output(message)
     })
   }
+  
 
   public showAnswerFeedback(isCorrect: boolean): void {
     this.handleErrors(() => {
