@@ -38,6 +38,13 @@ export class QuizController {
     })
   }
 
+  public requestHint(): void {
+    this.handleErrors(() => {
+      const hint = this.game.requestHint()
+      this.ui.displayHint(`Hint: ${hint}`)
+    })
+  }
+
   private handleErrors<T>(fn: () => T): T {
     try {
       return fn()
