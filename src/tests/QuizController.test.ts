@@ -63,6 +63,18 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
   })
  
+  it('should throw QuizControllerError with correct message when retrieving the next question fails', () => {
+    // Mock `getNextQuestion` to throw an error.
+    mockGame.getNextQuestion.mockImplementation(() => {
+      throw new Error('Original game error')
+    })
+  
+    expect(() => sut.showNextQuestion()).toThrow(QuizControllerError)
+    expect(() => sut.showNextQuestion()).toThrow('Original game error')
+  
+    expect(mockUI.displayQuestion).not.toHaveBeenCalled()
+  })
+
   it('should return true for a correct answer', () => {
     mockGame.checkAnswer.mockReturnValueOnce(true)
   
