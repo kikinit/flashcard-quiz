@@ -72,6 +72,14 @@ describe('QuizController', () => {
     expect(requestHintSpy).toHaveBeenCalled()
   })
 
+  it('should call showNextQuestion when input is "n" in handleUserAction method', () => {
+    const showNextQuestionSpy = jest.spyOn(sut, 'showNextQuestion')
+  
+    sut.handleUserAction('n')
+  
+    expect(showNextQuestionSpy).toHaveBeenCalled()
+  })
+
   it('should display an error for unknown commands', () => {
   sut.handleUserAction('z')
 
