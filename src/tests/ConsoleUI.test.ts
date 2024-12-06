@@ -212,7 +212,9 @@ describe('ConsoleUI - User Input Method Functionality', () => {
 
   it('should process user input for the "q" command in start method', () => {
     inputValue = 'q' // Simulate "exit" command.
-    sut.start()
+    const result = sut.start()
+
+    expect(result).toBe(StartCommand.EXIT)
 
     expect(mockOutput).toHaveBeenCalledWith('Goodbye!')
     expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
@@ -220,9 +222,12 @@ describe('ConsoleUI - User Input Method Functionality', () => {
 
   it('should display an error message for unknown commands in start method', () => {
     inputValue = 'invalid' // Simulate an invalid command.
-    sut.start()
-
+    const result = sut.start()
+  
+    expect(result).toBe(StartCommand.UNKNOWN)
+  
     expect(mockOutput).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
+  
     expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
   })
 })
