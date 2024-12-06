@@ -7,7 +7,7 @@ describe('Question', () => {
   const questionData = {
     text: 'What is the capital is is known for its iconic river, the Seine',
     options: ['Berlin', 'Stockholm', 'Paris'],
-    correctAnswer: 'Paris',
+    correctAnswer:'3',
     hints: [
       'Many famous writers and philosophers, such as Victor Hugo and Jean-Paul Sartre, called this city home.',
       'It has neighborhoods like Montmartre and Le Marais, famous for their unique charm.',
@@ -35,7 +35,7 @@ describe('Question', () => {
   })
 
   it('should invalidate an incorrect answer', () => {
-    expect(sut.checkAnswer('Berlin')).toBe(false)
+    expect(sut.checkAnswer('2')).toBe(false)
   })
 
   it('should throw an InvalidAnswerError if the provided answer is not in the options', () => {

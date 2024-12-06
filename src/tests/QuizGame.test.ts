@@ -19,8 +19,8 @@ describe('QuizGame', () => {
   const questionA = {
     text: 'What does the term "hoisting" mean in JavaScript?',
     options: ['Variable declaration', 'Loop optimization', 'Runtime scope'],
-    correctAnswer: 'Variable declaration',
-    wrongAnswer: 'Loop optimization',
+    correctAnswer: '1',
+    wrongAnswer: '3',
     hints: [
       'It describes a default behavior of JavaScript interpreters.',
       'This term applies to both var and function declarations but not to let and const.',
@@ -32,8 +32,8 @@ describe('QuizGame', () => {
   const questionB = {
     text: 'Which HTTP status code is used when a resource is successfully created?',
     options: ['200', '201', '204'],
-    correctAnswer: '201',
-    wrongAnswer: '204',
+    correctAnswer: '3',
+    wrongAnswer: '2',
     hints: [
       'It signifies the successful creation of a resource, such as a new database entry.',
       'It is commonly used in REST APIs to indicate resource creation.',
@@ -45,7 +45,7 @@ describe('QuizGame', () => {
   const questionC = {
     text: 'What is the purpose of HTTP status codes?',
     options: ['Error signaling', 'Response status', 'Both'],
-    correctAnswer: 'Both',
+    correctAnswer: '3',
     hints: [
       'They help indicate the outcome of HTTP requests.',
       'They are part of the response from a web server.',

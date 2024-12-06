@@ -33,7 +33,7 @@ export class QuizController {
         this.ui.displayQuestion(nextQuestion)
       }
     })
-  }  
+  }
  
   public handleAnswer(input: string): boolean {
     return this.handleErrors(() => {

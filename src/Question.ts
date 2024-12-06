@@ -19,10 +19,11 @@ export class Question {
   }
 
   public checkAnswer(input: string): boolean {
-    if (!this.options.includes(input)) {
+    const optionIndex = parseInt(input) - 1 // Convert input to 0-based index.
+    if (isNaN(optionIndex) || optionIndex < 0 || optionIndex >= this.options.length) {
       throw new InvalidAnswerError(input, this.options)
     }
-    return input === this.getAnswer()
+    return this.options[optionIndex] === this.getAnswer()
   }
 
   public getHint(): string {
@@ -36,6 +37,7 @@ export class Question {
   }
 
   private getAnswer(): string {
-    return this.answer
+    const answerIndex = parseInt(this.answer) - 1
+    return this.options[answerIndex]
   }
 }
