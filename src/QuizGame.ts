@@ -1,6 +1,5 @@
 import { Question } from './Question'
 import { QuestionBank } from './QuestionBank'
-import { QuestionFactory } from './QuestionFactory'
 import { Scoreboard } from './Scoreboard'
 import { GameState } from './GameState'
 import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from './errors'
@@ -11,29 +10,26 @@ export class QuizGame {
   private readonly MAX_HINTS = 4
   private hintsUsed: number = 0
   private questionBank: QuestionBank
-  private factory: QuestionFactory
   private currentQuestion: Question | null = null
   private gameState: GameState = GameState.PLAYING
   private scoreboard: Scoreboard
 
-  constructor(questionBank: QuestionBank, factory: QuestionFactory, scoreboard: Scoreboard) {
+  constructor(questionBank: QuestionBank, scoreboard: Scoreboard) {
     this.questionBank = questionBank
-    this.factory = factory
     this.scoreboard = scoreboard
   }
 
-  public addQuestion(
+  public addQuestion(questionData: {
     text: string,
     options: string[],
     correctAnswer: string,
     hints: string[]
-  ): void {
-    const question = this.factory.createQuestion(text, options, correctAnswer, hints)
+  }): void {
     this.questionBank.addQuestion(
-      question.getText(),
-      question.getOptions(),
-      question['answer'],
-      question['hints']
+      questionData.text,
+      questionData.options,
+      questionData.correctAnswer,
+      questionData.hints
     )
   }
 
