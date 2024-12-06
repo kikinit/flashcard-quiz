@@ -15,7 +15,8 @@ describe('QuizController', () => {
       checkAnswer: jest.fn(),
       getNextQuestion: jest.fn(),
       requestHint: jest.fn(),
-      restart: jest.fn(),
+      getScore: jest.fn(),
+      restart: jest.fn()
     } as unknown as jest.Mocked<QuizGame>
 
     // Mock ConsoleUI instance with necessary methods.
@@ -24,6 +25,7 @@ describe('QuizController', () => {
       displayQuestion: jest.fn(),
       displayError: jest.fn(),
       displayHint: jest.fn(),
+      displayEndGame: jest.fn(),
       restartGame: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
 
@@ -146,11 +148,31 @@ describe('QuizController', () => {
     mockGame.requestHint.mockImplementation(() => {
       throw new Error('Game hint error')
     })
-  
+    
     expect(() => sut.requestHint()).toThrow(QuizControllerError)
     expect(() => sut.requestHint()).toThrow('Game hint error')
-
+    
     expect(mockUI.displayError).toHaveBeenCalledWith('Game hint error')
+  })
+
+  it('should invoke UI displayEndGame with the correct score in endGame method', () => {
+    mockGame.getScore.mockReturnValue(42)
+  
+    sut.endGame()
+  
+    expect(mockUI.displayEndGame).toHaveBeenCalledWith(42)
+  })
+
+  it('should handle errors when ending the game, display them via UI, and throw QuizControllerError in endGame method', () => {
+    // Mock the game to throw an error when retrieving the score.
+    mockGame.getScore.mockImplementation(() => {
+      throw new Error('Game score error')
+    })
+
+    expect(() => sut.endGame()).toThrow(QuizControllerError)
+    expect(() => sut.endGame()).toThrow('Game score error')
+
+    expect(mockUI.displayError).toHaveBeenCalledWith('Game score error')
   })
 
   it('should restart the game and inform the UI in restartGame method', () => {
@@ -160,10 +182,11 @@ describe('QuizController', () => {
     expect(mockUI.restartGame).toHaveBeenCalled()
   })
   
+  // TESTS FOR GLOBAL ÈRROR HANDLING IN TEMPLATE METHOD
 
   it('should execute the wrapped function without errors using handleErrors template method', () => {
     const mockFunction = jest.fn()
-    // Wrap the mock function in handleErrors via a public method
+    // Wrap the mock function in handleErrors via a public method.
     sut['handleErrors'](mockFunction)
     expect(mockFunction).toHaveBeenCalled()
   })
