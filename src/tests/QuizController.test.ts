@@ -23,7 +23,8 @@ describe('QuizController', () => {
       start: jest.fn(),
       displayQuestion: jest.fn(),
       displayError: jest.fn(),
-      displayHint: jest.fn()
+      displayHint: jest.fn(),
+      restartGame: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
 
     // Instantiate the controller.
@@ -151,6 +152,14 @@ describe('QuizController', () => {
 
     expect(mockUI.displayError).toHaveBeenCalledWith('Game hint error')
   })
+
+  it('should restart the game and inform the UI in restartGame method', () => {
+    sut.restartGame()
+  
+    expect(mockGame.restart).toHaveBeenCalled()
+    expect(mockUI.restartGame).toHaveBeenCalled()
+  })
+  
 
   it('should execute the wrapped function without errors using handleErrors template method', () => {
     const mockFunction = jest.fn()
