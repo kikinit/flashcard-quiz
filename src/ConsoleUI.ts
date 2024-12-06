@@ -1,15 +1,12 @@
 import { Question } from './Question'
-import { QuizGame } from './QuizGame'
 import { StartCommand } from './StartCommand'
 import { ConsoleUIError } from './errors'
 
 export class ConsoleUI {
-  private game: QuizGame
   private input: (callback: (input: string) => void) => void
   private output: (message: string) => void
 
   constructor(
-    game: QuizGame,
     input = (callback: (input: string) => void) => {
       process.stdin.on('data', (chunk: Buffer | string) => {
         const input = chunk.toString().trim()
@@ -18,7 +15,6 @@ export class ConsoleUI {
     },
     output = console.log
   ) {
-    this.game = game
     this.input = input
     this.output = output
   }

@@ -9,22 +9,15 @@ import { StartCommand } from '../StartCommand'
 describe('ConsoleUI - Dependency Injection', () => {
   let mockOutput: jest.Mock
   let mockInput: jest.Mock
-  let mockGame: jest.Mocked<QuizGame>
   let sut: ConsoleUI
 
   beforeEach(() => {
-    // Mock the QuizGame instance.
-    mockGame = {
-      checkAnswer: jest.fn(),
-      getNextQuestion: jest.fn(),
-    } as unknown as jest.Mocked<QuizGame>
-
     // Mock the input and output streams.
     mockOutput = jest.fn()
     mockInput = jest.fn((callback: (input: string) => void) => callback('mock input'))
 
-    // Instantiate ConsoleUI with the mocked game and I/O.
-    sut = new ConsoleUI(mockGame, mockInput, mockOutput)
+    // Instantiate ConsoleUI with the mocked I/O.
+    sut = new ConsoleUI(mockInput, mockOutput)
   })
 
   it('should call the input function with a callback', () => {
@@ -46,22 +39,13 @@ describe('ConsoleUI - Method Functionality', () => {
   let mockInput: jest.Mock
   let mockOutput: jest.Mock
   let sut: ConsoleUI
-  let mockGame: jest.Mocked<QuizGame>
 
   beforeEach(() => {
-    // Mock the QuizGame instance with necessary methods.
-    mockGame = {
-      checkAnswer: jest.fn(),
-      getNextQuestion: jest.fn(),
-      requestHint: jest.fn(),
-      restart: jest.fn()
-    } as unknown as jest.Mocked<QuizGame>
-
     // Mock the output stream.
     mockOutput = jest.fn()
 
     // Instantiate ConsoleUI with the mocked game and I/O.
-    sut = new ConsoleUI(mockGame, mockInput, mockOutput)
+    sut = new ConsoleUI(mockInput, mockOutput)
   })
   
   it('should display a question using default output in displayQuestion method', () => {
@@ -206,8 +190,8 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     mockInput = jest.fn((callback: (input: string) => void) => callback(inputValue))
     mockOutput = jest.fn()
 
-    // Instantiate ConsoleUI with the mocked game and I/O.
-    sut = new ConsoleUI(mockGame, mockInput, mockOutput)
+    // Instantiate ConsoleUI with the mocked I/O.
+    sut = new ConsoleUI(mockInput, mockOutput)
   })
 
   it('should display a welcome message when start method is called', () => {
