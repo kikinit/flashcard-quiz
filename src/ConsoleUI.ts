@@ -67,6 +67,10 @@ export class ConsoleUI {
         return UserAction.REQUEST_HINT
       case 'n':
         return UserAction.NEXT_QUESTION
+      case '1':
+      case '2':
+      case '3':
+        return UserAction.SUBMIT_ANSWER
       default:
         return UserAction.UNKNOWN
     }
