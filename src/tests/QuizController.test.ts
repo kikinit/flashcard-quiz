@@ -2,6 +2,7 @@ import { QuizController } from '../QuizController'
 import { QuizGame } from '../QuizGame'
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
+import { UserAction } from '../UserAction'
 import { QuizControllerError } from '../errors'
 
 describe('QuizController', () => {
@@ -64,36 +65,37 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
-  it('should call requestHint when input is "h" in handleUserAction method', () => {
-    const requestHintSpy = jest.spyOn(sut, 'requestHint')
-  
-    sut.handleUserAction('h')
-  
-    expect(requestHintSpy).toHaveBeenCalled()
+  it('should handle REQUEST_HINT action', () => {
+    sut.handleUserAction(UserAction.REQUEST_HINT)
+
+    expect(mockGame.requestHint).toHaveBeenCalled()
+    expect(mockUI.displayHint).toHaveBeenCalled()
   })
 
-  it('should call showNextQuestion when input is "n" in handleUserAction method', () => {
-    const showNextQuestionSpy = jest.spyOn(sut, 'showNextQuestion')
-  
-    sut.handleUserAction('n')
-  
-    expect(showNextQuestionSpy).toHaveBeenCalled()
+  it('should handle NEXT_QUESTION action', () => {
+    sut.handleUserAction(UserAction.NEXT_QUESTION)
+
+    expect(mockGame.getNextQuestion).toHaveBeenCalled()
+    expect(mockUI.displayQuestion).toHaveBeenCalled()
   })
 
-  it('should validate the answer when a numeric input is provided in handleUserAction method', () => {
-    const handleAnswerSpy = jest.spyOn(sut, 'handleAnswer')
-  
-    sut.handleUserAction('1')
-  
-    expect(handleAnswerSpy).toHaveBeenCalledWith('1')
+  it('should handle SUBMIT_ANSWER action', () => {
+    sut.handleUserAction(UserAction.SUBMIT_ANSWER, '1')
+
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('1')
   })
 
-  it('should display an error for unknown commands in handleUserAction method', () => {
-  sut.handleUserAction('z')
+  it('should display an error if SUBMIT_ANSWER action is called without input', () => {
+    sut.handleUserAction(UserAction.SUBMIT_ANSWER)
 
-  expect(mockUI.displayError).toHaveBeenCalledWith('Unknown command')
-})
+    expect(mockUI.displayError).toHaveBeenCalledWith('No answer provided')
+  })
 
+  it('should display an error for UNKNOWN action', () => {
+    sut.handleUserAction(UserAction.UNKNOWN)
+
+    expect(mockUI.displayError).toHaveBeenCalledWith('Unknown command')
+  })
 
   it('should get the next question from the game and display it via the UI in StartGame method', () => {
     // Mock the question object.
