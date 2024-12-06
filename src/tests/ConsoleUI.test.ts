@@ -1,7 +1,7 @@
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
 import { QuizGame } from '../QuizGame'
-import { ConsoleUIError } from '../errors/ConsoleUIError'
+import { ConsoleUIError } from '../errors/'
 import { StartCommand } from '../StartCommand'
 
 // Note: Direct testing for the default `input` handling (process.stdin) is omitted due to complexity in mocking stdin.
@@ -153,7 +153,7 @@ describe('ConsoleUI - Method Functionality', () => {
     })
 
     expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
-    expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred while processing the answer')
+    expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred')
   })
 
   it('restarts the game and displays a confirmation message in restartGame method', () => {
