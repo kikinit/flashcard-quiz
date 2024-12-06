@@ -19,7 +19,14 @@ export class QuizController {
     })
   }
 
-  public async playGame(): Promise<void> {
+  public playGame(): void {
+    this.handleErrors(() => {
+      while (!this.game.isGameOver()) {
+        const action = this.ui.getUserInput()
+        this.handleUserAction(action)
+      }
+      this.endGame()
+    })
   }
 
   public handleStartCommand(command: StartCommand): boolean {
