@@ -84,7 +84,15 @@ describe('QuizController', () => {
     expect(result).toBe(false)
     expect(mockUI.displayMessage).toHaveBeenCalledWith('Goodbye!')
     expect(mockUI.displayError).not.toHaveBeenCalled()
-})
+  })
+
+  it('should display an error message and continue the game when command is StartCommand.UNKNOWN in handleStartCommand method', () => {
+    const result = sut.handleStartCommand(StartCommand.UNKNOWN)
+
+    expect(result).toBe(true)
+    expect(mockUI.displayError).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
+    expect(mockUI.displayMessage).not.toHaveBeenCalled()
+  })
 
   it('should handle REQUEST_HINT action', () => {
     sut.handleUserAction(UserAction.REQUEST_HINT)
