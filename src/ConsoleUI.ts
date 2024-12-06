@@ -1,5 +1,6 @@
 import { Question } from './Question'
 import { StartCommand } from './StartCommand'
+import { UserAction } from './UserAction'
 import { ConsoleUIError } from './errors'
 
 export class ConsoleUI {
@@ -52,7 +53,22 @@ export class ConsoleUI {
       this.output(message)
     })
   }
+
+  public handleUserInput(): UserAction {
+    let userInput = ''
+    this.handleErrors(() => {
+      this.input((input) => {
+        userInput = input.trim().toLowerCase()
+      })
+    })
   
+    switch (userInput) {
+      case 'h':
+        return UserAction.REQUEST_HINT
+      default:
+        return UserAction.UNKNOWN
+    }
+  }
 
   public showAnswerFeedback(isCorrect: boolean): void {
     this.handleErrors(() => {
