@@ -22,7 +22,8 @@ describe('QuizController', () => {
     mockUI = {
       start: jest.fn(),
       displayQuestion: jest.fn(),
-      displayError: jest.fn()
+      displayError: jest.fn(),
+      displayHint: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
 
     // Instantiate the controller.
@@ -125,6 +126,30 @@ describe('QuizController', () => {
     expect(() => sut.handleAnswer('A')).toThrow('Answer processing error')
 
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
+  })
+
+  it('should request a hint from the game and display it via the UI in requestHint method', () => {
+    // Mock the game to return a hint
+    const mockHint = 'This is a hint'
+    mockGame.requestHint.mockReturnValue(mockHint)
+  
+    sut.requestHint()
+  
+    expect(mockGame.requestHint).toHaveBeenCalled()
+
+    expect(mockUI.displayHint).toHaveBeenCalledWith(`Hint: ${mockHint}`)
+  })
+
+  it('should handle errors when requesting a hint, display them via UI, and throw QuizControllerError in requestHint method', () => {
+    // Mock the game to throw an error for hint requests.
+    mockGame.requestHint.mockImplementation(() => {
+      throw new Error('Game hint error')
+    })
+  
+    expect(() => sut.requestHint()).toThrow(QuizControllerError)
+    expect(() => sut.requestHint()).toThrow('Game hint error')
+
+    expect(mockUI.displayError).toHaveBeenCalledWith('Game hint error')
   })
 
   it('should execute the wrapped function without errors using handleErrors template method', () => {
