@@ -27,9 +27,10 @@ describe('QuizController', () => {
     mockUI = {
       start: jest.fn(),
       displayQuestion: jest.fn(),
+      displayHint: jest.fn(),
+      getUserInput: jest.fn(),
       displayMessage: jest.fn(),
       displayError: jest.fn(),
-      displayHint: jest.fn(),
       displayEndGame: jest.fn(),
       restartGame: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
@@ -108,47 +109,28 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).toHaveBeenCalled()
   })
 
-  it('should handle SUBMIT_ANSWER action', () => {
-    sut.handleUserAction(UserAction.SUBMIT_ANSWER, '1')
+  it('should handle SUBMIT_ANSWER_1 action', () => {
+    sut.handleUserAction(UserAction.SUBMIT_ANSWER_1)
 
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('1')
   })
 
-  it('should display an error if SUBMIT_ANSWER action is called without input', () => {
-    sut.handleUserAction(UserAction.SUBMIT_ANSWER)
+  it('should handle SUBMIT_ANSWER_2 action', () => {
+    sut.handleUserAction(UserAction.SUBMIT_ANSWER_2)
 
-    expect(mockUI.displayError).toHaveBeenCalledWith('No answer provided')
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('2')
+  })
+
+  it('should handle SUBMIT_ANSWER_3 action', () => {
+    sut.handleUserAction(UserAction.SUBMIT_ANSWER_3)
+
+    expect(mockGame.checkAnswer).toHaveBeenCalledWith('3')
   })
 
   it('should display an error for UNKNOWN action', () => {
     sut.handleUserAction(UserAction.UNKNOWN)
 
     expect(mockUI.displayError).toHaveBeenCalledWith('Unknown command')
-  })
-
-  it('should get the next question from the game and display it via the UI in StartGame method', () => {
-    // Mock the question object.
-    const mockQuestion = { text: 'Mock question' } as unknown as Question
-    mockGame.getNextQuestion.mockReturnValue(mockQuestion)
-  
-    // Call the method.
-    sut.playGame()
-  
-    // Verify interactions.
-    expect(mockGame.getNextQuestion).toHaveBeenCalled()
-    expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
-  })
-
-  it('should throw QuizControllerError with correct message when starting the game fails in startGame method', () => {
-    // Mock `getNextQuestion` to throw an error.
-    mockGame.getNextQuestion.mockImplementation(() => {
-      throw new Error('Game start error')
-    })
-
-    expect(() => sut.playGame()).toThrow(QuizControllerError)
-    expect(() => sut.playGame()).toThrow('Game start error')
-
-    expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
   it('should retrieve the next question and display it via the UI when the game is not over in showNextQuestion method', () => {
