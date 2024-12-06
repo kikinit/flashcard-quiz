@@ -236,6 +236,12 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     expect(result).toBe(UserAction.REQUEST_HINT)
   })
 
+  it('should return NEXT_QUESTION for "n" input in getUserInput method', () => {
+    mockInput.mockImplementation((callback) => callback('n'))
+    const result = sut.getUserInput()
+    expect(result).toBe(UserAction.NEXT_QUESTION)
+  })
+
   it('should return UNKNOWN for invalid input in getUserInput method', () => {
     mockInput.mockImplementation((callback) => callback('x'))
     const result = sut.getUserInput()
