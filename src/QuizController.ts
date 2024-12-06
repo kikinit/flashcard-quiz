@@ -24,6 +24,12 @@ export class QuizController {
     })
   }
 
+  public handleUserAction(input: string): void {
+    if (input.toLowerCase() === 'h') {
+      this.requestHint()
+    }
+  }
+  
   public showNextQuestion(): void {
     this.handleErrors(() => {
       if (this.game.isGameOver()) {
