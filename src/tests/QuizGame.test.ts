@@ -2,12 +2,14 @@ import { Question } from '../Question'
 import { QuestionBank } from '../QuestionBank'
 import { QuizGame } from '../QuizGame'
 import { QuestionFactory } from '../QuestionFactory'
+import { Scoreboard } from '../Scoreboard'
 import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from '../errors'
 
 describe('QuizGame', () => {
   let questionBank: QuestionBank
   let factory: jest.Mocked<QuestionFactory>
   let sut: QuizGame
+  let scoreboard: Scoreboard
 
   // Mocked questions.
   let mockQuestionA: Question
@@ -82,9 +84,12 @@ describe('QuizGame', () => {
       })
     }
 
+    // Create an instance of Scoreboard.
+    scoreboard = new Scoreboard()
+
     // Inject the mocked factory.
     questionBank = new QuestionBank(factory)
-    sut = new QuizGame(questionBank, factory)
+    sut = new QuizGame(questionBank, factory, scoreboard)
 
     // Add questions to the bank.
     questionBank.addQuestion(

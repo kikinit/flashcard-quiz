@@ -14,11 +14,12 @@ export class QuizGame {
   private factory: QuestionFactory
   private currentQuestion: Question | null = null
   private gameState: GameState = GameState.PLAYING
-  private scoreboard: Scoreboard = new Scoreboard()
+  private scoreboard: Scoreboard
 
-  constructor(questionBank: QuestionBank, factory: QuestionFactory) {
+  constructor(questionBank: QuestionBank, factory: QuestionFactory, scoreboard: Scoreboard) {
     this.questionBank = questionBank
     this.factory = factory
+    this.scoreboard = scoreboard
   }
 
   public addQuestion(
