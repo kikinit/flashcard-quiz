@@ -80,7 +80,7 @@ describe('QuizController', () => {
     expect(showNextQuestionSpy).toHaveBeenCalled()
   })
 
-  it('should display an error for unknown commands', () => {
+  it('should display an error for unknown commands in handleUserAction method', () => {
   sut.handleUserAction('z')
 
   expect(mockUI.displayError).toHaveBeenCalledWith('Unknown command')
