@@ -142,6 +142,25 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.restartGame()).toThrow(ConsoleUIError)
   })
 
+  it('should display the given message in displayMessage method', () => {
+    const message = 'Hello, this is a test message.'
+
+    sut.displayMessage(message)
+
+    expect(mockOutput).toHaveBeenCalledWith(message)
+  })
+
+  it('should throw a ConsoleUIError if output fails in displayMessage method', () => {
+    const message = 'This should trigger an error.'
+
+    // Mock `output` to throw an error.
+    mockOutput.mockImplementationOnce(() => {
+      throw new Error('Output error')
+    })
+
+    expect(() => sut.displayMessage(message)).toThrow(ConsoleUIError)
+  })
+
   it('should display an error message using the output function in displayError method', () => {
     const errorMessage = 'An error occurred'
     sut.displayError(errorMessage)
