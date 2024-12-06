@@ -1,8 +1,9 @@
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
 import { QuizGame } from '../QuizGame'
-import { ConsoleUIError } from '../errors/'
 import { StartCommand } from '../StartCommand'
+import { UserAction } from '../UserAction'
+import { ConsoleUIError } from '../errors/'
 
 // Note: Direct testing for the default `input` handling (process.stdin) is omitted due to complexity in mocking stdin.
 // The `ConsoleUI` class supports dependency injection for `input`, which is thoroughly tested here.
@@ -227,6 +228,18 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     expect(mockOutput).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
   
     expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
+  })
+
+  it('should return REQUEST_HINT for "h" input in getUserInput method', () => {
+    mockInput.mockImplementation((callback) => callback('h'))
+    const result = sut.getUserInput()
+    expect(result).toBe(UserAction.REQUEST_HINT)
+  })
+
+  it('should return UNKNOWN for invalid input in getUserInput method', () => {
+    mockInput.mockImplementation((callback) => callback('x'))
+    const result = sut.getUserInput()
+    expect(result).toBe(UserAction.UNKNOWN)
   })
 })
 
