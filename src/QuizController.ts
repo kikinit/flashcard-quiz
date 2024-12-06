@@ -34,8 +34,10 @@ export class QuizController {
       case StartCommand.EXIT:
         this.ui.displayMessage('Goodbye!')
         return false
+      case StartCommand.UNKNOWN:
+        this.ui.displayError('Unknown command. Type "s" to play or "q" to quit.')
+        return true
     }
-    return false
   }
 
   public handleUserAction(action: UserAction, input?: string): void {
