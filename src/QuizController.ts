@@ -19,11 +19,7 @@ export class QuizController {
     })
   }
 
-  public playGame(): void {
-    this.handleErrors(() => {
-      const nextQuestion = this.game.getNextQuestion()
-      this.ui.displayQuestion(nextQuestion)
-    })
+  public async playGame(): Promise<void> {
   }
 
   public handleStartCommand(command: StartCommand): boolean {
@@ -40,25 +36,24 @@ export class QuizController {
     }
   }
 
-  public handleUserAction(action: UserAction, input?: string): void {
+  public handleUserAction(action: UserAction): void {
     switch (action) {
       case UserAction.REQUEST_HINT:
-        this.requestHint()
-        break
+          this.requestHint()
+          break
       case UserAction.NEXT_QUESTION:
-        this.showNextQuestion()
-        break
-      case UserAction.SUBMIT_ANSWER:
-        if (input) {
-          this.handleAnswer(input)
-        } else {
-          this.ui.displayError('No answer provided')
-        }
-        break
+          this.showNextQuestion()
+          break
+      case UserAction.SUBMIT_ANSWER_1:
+      case UserAction.SUBMIT_ANSWER_2:
+      case UserAction.SUBMIT_ANSWER_3:
+          const answerIndex = parseInt(action.split('_')[2])
+          this.handleAnswer(answerIndex.toString())
+          break
       case UserAction.UNKNOWN:
       default:
-        this.ui.displayError('Unknown command')
-        break
+          this.ui.displayError('Unknown command')
+          break
     }
   }
   
