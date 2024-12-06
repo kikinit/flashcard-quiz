@@ -66,7 +66,6 @@ export class ConsoleUI {
 
   public restartGame(): void {
     this.handleErrors(() => {
-      this.game.restart()
       this.output('Game has been restarted. You can start again!')
     })
   }
