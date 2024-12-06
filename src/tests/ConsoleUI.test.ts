@@ -170,6 +170,13 @@ describe('ConsoleUI - Method Functionality', () => {
 
     expect(() => sut.restartGame()).toThrow(ConsoleUIError)
   })
+
+  it('should display an error message using the output function in displayError method', () => {
+    const errorMessage = 'An error occurred'
+    sut.displayError(errorMessage)
+  
+    expect(mockOutput).toHaveBeenCalledWith(errorMessage)
+  })  
 })
 
 describe('ConsoleUI - User Input Method Functionality', () => {
