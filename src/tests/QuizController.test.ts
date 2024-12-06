@@ -2,6 +2,7 @@ import { QuizController } from '../QuizController'
 import { QuizGame } from '../QuizGame'
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
+import { QuizControllerError } from '../errors'
 
 describe('QuizController', () => {
   let mockGame: jest.Mocked<QuizGame>
@@ -21,6 +22,7 @@ describe('QuizController', () => {
     mockUI = {
       start: jest.fn(),
       displayQuestion: jest.fn(),
+      displayError: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
 
     // Instantiate the controller.
@@ -75,5 +77,28 @@ describe('QuizController', () => {
     const result = sut.handleAnswer('B')
     expect(result).toBe(false)
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
+  })
+
+  it('should execute the wrapped function without errors using handleErrors template method', () => {
+    const mockFunction = jest.fn()
+    // Wrap the mock function in handleErrors via a public method
+    sut['handleErrors'](mockFunction)
+    expect(mockFunction).toHaveBeenCalled()
+  })
+
+  it('should throw QuizControllerError for known errors using handleErrors template method', () => {
+    const mockFunction = jest.fn(() => {
+      throw new Error('Known error')
+    })
+    expect(() => sut['handleErrors'](mockFunction)).toThrow(QuizControllerError)
+    expect(() => sut['handleErrors'](mockFunction)).toThrow('Known error')
+  })
+
+  it('should throw QuizControllerError for unknown errors using handleErrors template method', () => {
+    const mockFunction = jest.fn(() => {
+      throw 'Unknown error'
+    })
+    expect(() => sut['handleErrors'](mockFunction)).toThrow(QuizControllerError)
+    expect(() => sut['handleErrors'](mockFunction)).toThrow('[QuizControllerError] An unknown error occurred')
   })
 })
