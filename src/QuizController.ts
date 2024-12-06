@@ -1,6 +1,7 @@
 import { QuizGame } from './QuizGame'
 import { ConsoleUI } from './ConsoleUI'
 import { QuizControllerError } from './errors'
+import { UserAction } from './UserAction'
 
 export class QuizController {
   private game: QuizGame
@@ -24,15 +25,25 @@ export class QuizController {
     })
   }
 
-  public handleUserAction(input: string): void {
-    if (input.toLowerCase() === 'h') {
-      this.requestHint()
-    } else if (input.toLowerCase() === 'n') {
-      this.showNextQuestion()
-    } else if (!isNaN(parseInt(input))) {
-      this.handleAnswer(input)
-    } else {
-      this.ui.displayError('Unknown command')
+  public handleUserAction(action: UserAction, input?: string): void {
+    switch (action) {
+      case UserAction.REQUEST_HINT:
+        this.requestHint()
+        break
+      case UserAction.NEXT_QUESTION:
+        this.showNextQuestion()
+        break
+      case UserAction.SUBMIT_ANSWER:
+        if (input) {
+          this.handleAnswer(input)
+        } else {
+          this.ui.displayError('No answer provided')
+        }
+        break
+      case UserAction.UNKNOWN:
+      default:
+        this.ui.displayError('Unknown command')
+        break
     }
   }
   
