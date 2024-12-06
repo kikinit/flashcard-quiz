@@ -2,6 +2,7 @@ import { QuizController } from '../QuizController'
 import { QuizGame } from '../QuizGame'
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
+import { StartCommand } from '../StartCommand'
 import { UserAction } from '../UserAction'
 import { QuizControllerError } from '../errors'
 
@@ -26,6 +27,7 @@ describe('QuizController', () => {
     mockUI = {
       start: jest.fn(),
       displayQuestion: jest.fn(),
+      displayMessage: jest.fn(),
       displayError: jest.fn(),
       displayHint: jest.fn(),
       displayEndGame: jest.fn(),
@@ -63,6 +65,16 @@ describe('QuizController', () => {
     expect(() => sut.start()).toThrow('UI start error')
 
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
+  })
+
+  it('should start the game when command is StartCommand.START in handleStartCommand method', () => {
+    const playGameSpy = jest.spyOn(sut, 'playGame')
+
+    sut.handleStartCommand(StartCommand.START)
+
+    expect(playGameSpy).toHaveBeenCalled()
+    expect(mockUI.displayMessage).not.toHaveBeenCalled()
+    expect(mockUI.displayError).not.toHaveBeenCalled()
   })
 
   it('should handle REQUEST_HINT action', () => {
