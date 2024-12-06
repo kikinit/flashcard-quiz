@@ -45,6 +45,13 @@ export class QuizController {
     })
   }
 
+  public restartGame(): void {
+    this.handleErrors(() => {
+      this.game.restart()
+      this.ui.restartGame()
+    })
+  }
+
   private handleErrors<T>(fn: () => T): T {
     try {
       return fn()
