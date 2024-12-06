@@ -118,24 +118,22 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.showAnswerFeedback(false)).toThrow(ConsoleUIError)
   })  
 
-  it('should request and display a hint for the current question in requestHint method', () => {
-    // Mock the game to return a hint.
-    const mockHint = 'This is a hint'
-    mockGame.requestHint.mockReturnValue(mockHint)
-
-    sut.requestHint()
-
-    expect(mockGame.requestHint).toHaveBeenCalled()
-    expect(mockOutput).toHaveBeenCalledWith(`Hint: ${mockHint}`)
+  it('should display a hint using the output function in displayHint method', () => {
+    // Call the displayHint method with a valid message
+    sut.displayHint('This is a hint')
+  
+    // Verify that the output method was called with the correct message
+    expect(mockOutput).toHaveBeenCalledWith('This is a hint')
   })
-
-  it('should throw a ConsoleUIError for errors in requestHint method', () => {
-    // Mock the game to throw an error for hint requests.
-    mockGame.requestHint.mockImplementation(() => {
-      throw new Error('Game error')
+  
+  it('should handle errors when displaying a hint in displayHint method', () => {
+    // Mock `output` to throw an error
+    mockOutput.mockImplementationOnce(() => {
+      throw new Error('Output error')
     })
-
-    expect(() => sut.requestHint()).toThrow(ConsoleUIError)
+  
+    // Call the displayHint method and ensure errors are caught and rethrown as ConsoleUIError
+    expect(() => sut.displayHint('This is a hint')).toThrow(ConsoleUIError)
   })
 
   it('should wrap errors in a ConsoleUIError using handleErrors template method', () => {
