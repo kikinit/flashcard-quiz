@@ -21,8 +21,10 @@ export class QuizController {
   }
 
   public showNextQuestion(): void {
-    const nextQuestion = this.game.getNextQuestion()
-    this.ui.displayQuestion(nextQuestion)
+    this.handleErrors(() => {
+      const nextQuestion = this.game.getNextQuestion()
+      this.ui.displayQuestion(nextQuestion)
+    })
   }
  
   public handleAnswer(input: string): boolean {
