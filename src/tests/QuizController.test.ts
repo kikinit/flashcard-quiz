@@ -1,6 +1,7 @@
 import { QuizController } from '../QuizController'
 import { QuizGame } from '../QuizGame'
 import { ConsoleUI } from '../ConsoleUI'
+import { Question } from '../Question'
 
 describe('QuizController', () => {
   let mockGame: jest.Mocked<QuizGame>
@@ -16,8 +17,10 @@ describe('QuizController', () => {
       restart: jest.fn(),
     } as unknown as jest.Mocked<QuizGame>
 
+    // Mock ConsoleUI instance with necessary methods.
     mockUI = {
       start: jest.fn(),
+      displayQuestion: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
 
     // Instantiate the controller.
@@ -33,6 +36,19 @@ describe('QuizController', () => {
   it('should invoke the start method in ConsoleUI in start method in QuizController', () => {
     sut.start()
     expect(mockUI.start).toHaveBeenCalled()
+  })
+
+  it('should get the next question from the game and display it via the UI in StartGame method', () => {
+    // Mock the question object.
+    const mockQuestion = { text: 'Mock question' } as unknown as Question
+    mockGame.getNextQuestion.mockReturnValue(mockQuestion)
+  
+    // Call the method.
+    sut.startGame()
+  
+    // Verify interactions.
+    expect(mockGame.getNextQuestion).toHaveBeenCalled()
+    expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
   })
 
   it('should return true for a correct answer', () => {
