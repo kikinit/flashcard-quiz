@@ -68,9 +68,11 @@ export class ConsoleUI {
       case 'n':
         return UserAction.NEXT_QUESTION
       case '1':
+        return UserAction.SUBMIT_ANSWER_1
       case '2':
+        return UserAction.SUBMIT_ANSWER_2
       case '3':
-        return UserAction.SUBMIT_ANSWER
+        return UserAction.SUBMIT_ANSWER_3
       default:
         return UserAction.UNKNOWN
     }
