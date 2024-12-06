@@ -69,7 +69,8 @@ describe('QuizController', () => {
   })
 
   it('should start the game when command is StartCommand.START in handleStartCommand method', () => {
-    const playGameSpy = jest.spyOn(sut, 'playGame')
+    // Spy on and mock `playGame` to prevent actual execution.
+    const playGameSpy = jest.spyOn(sut, 'playGame').mockImplementation(() => {})
 
     const result = sut.handleStartCommand(StartCommand.START)
 
@@ -77,7 +78,31 @@ describe('QuizController', () => {
     expect(playGameSpy).toHaveBeenCalled()
     expect(mockUI.displayMessage).not.toHaveBeenCalled()
     expect(mockUI.displayError).not.toHaveBeenCalled()
+
+    // Restore the original implementation to avoid test bleed.
+    playGameSpy.mockRestore()
   })
+
+  it('should terminate the loop when the game is over in playGame method', () => {
+    // Mock `isGameOver` to simulate one iteration before the game ends.
+    mockGame.isGameOver
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true)
+
+    // Mock `getUserInput` to return a valid action for the iteration.
+    mockUI.getUserInput.mockReturnValueOnce(UserAction.NEXT_QUESTION)
+
+    // Mock `showNextQuestion` to simulate behavior during the iteration.
+    jest.spyOn(sut, 'showNextQuestion').mockImplementation(() => {})
+
+    sut.playGame()
+
+    expect(mockUI.getUserInput).toHaveBeenCalledTimes(1)
+    expect(sut.showNextQuestion).toHaveBeenCalledTimes(1)
+    expect(mockGame.isGameOver).toHaveBeenCalledTimes(2)
+    expect(mockUI.displayError).not.toHaveBeenCalled()
+  })
+
 
   it('should display a goodbye message and stop the game when command is StartCommand.EXIT in handleStartCommand method', () => {
     const result = sut.handleStartCommand(StartCommand.EXIT)
