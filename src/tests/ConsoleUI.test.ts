@@ -242,6 +242,14 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     expect(result).toBe(UserAction.NEXT_QUESTION)
   })
 
+  it('should return SUBMIT_ANSWER for numeric inputs "1", "2", "3" in getUserInput method', () => {
+    ['1', '2', '3'].forEach((input) => {
+      mockInput.mockImplementation((callback) => callback(input))
+      const result = sut.getUserInput()
+      expect(result).toBe(UserAction.SUBMIT_ANSWER)
+    })
+  })
+
   it('should return UNKNOWN for invalid input in getUserInput method', () => {
     mockInput.mockImplementation((callback) => callback('x'))
     const result = sut.getUserInput()
