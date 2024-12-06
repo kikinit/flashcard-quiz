@@ -45,6 +45,13 @@ export class QuizController {
     })
   }
 
+  public endGame(): void {
+    this.handleErrors(() => {
+      const score = this.game.getScore()
+      this.ui.displayEndGame(score)
+    })
+  }
+
   public restartGame(): void {
     this.handleErrors(() => {
       this.game.restart()
