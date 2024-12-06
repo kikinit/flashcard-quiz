@@ -54,7 +54,7 @@ export class ConsoleUI {
     })
   }
 
-  public handleUserInput(): UserAction {
+  public getUserInput(): UserAction {
     let userInput = ''
     this.handleErrors(() => {
       this.input((input) => {
