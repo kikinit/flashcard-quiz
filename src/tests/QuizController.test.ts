@@ -72,6 +72,13 @@ describe('QuizController', () => {
     expect(requestHintSpy).toHaveBeenCalled()
   })
 
+  it('should display an error for unknown commands', () => {
+  sut.handleUserAction('z')
+
+  expect(mockUI.displayError).toHaveBeenCalledWith('Unknown command')
+})
+
+
   it('should get the next question from the game and display it via the UI in StartGame method', () => {
     // Mock the question object.
     const mockQuestion = { text: 'Mock question' } as unknown as Question
