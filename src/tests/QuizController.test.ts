@@ -40,6 +40,18 @@ describe('QuizController', () => {
     expect(mockUI.start).toHaveBeenCalled()
   })
 
+  it('should throw QuizControllerError with correct message when starting the UI fails in start method', () => {
+    // Mock `ui.start` to throw an error.
+    mockUI.start.mockImplementation(() => {
+      throw new Error('UI start error')
+    })
+
+    expect(() => sut.start()).toThrow(QuizControllerError)
+    expect(() => sut.start()).toThrow('UI start error')
+
+    expect(mockUI.displayQuestion).not.toHaveBeenCalled()
+  })
+
   it('should get the next question from the game and display it via the UI in StartGame method', () => {
     // Mock the question object.
     const mockQuestion = { text: 'Mock question' } as unknown as Question
@@ -51,6 +63,18 @@ describe('QuizController', () => {
     // Verify interactions.
     expect(mockGame.getNextQuestion).toHaveBeenCalled()
     expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
+  })
+
+  it('should throw QuizControllerError with correct message when starting the game fails in startGame method', () => {
+    // Mock `getNextQuestion` to throw an error.
+    mockGame.getNextQuestion.mockImplementation(() => {
+      throw new Error('Game start error')
+    })
+
+    expect(() => sut.startGame()).toThrow(QuizControllerError)
+    expect(() => sut.startGame()).toThrow('Game start error')
+
+    expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
   it('should retrieve the next question and display it via the UI in showNextQuestion method', () => {
@@ -75,7 +99,7 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
-  it('should return true for a correct answer', () => {
+  it('should return true for a correct answer in handleAnswer method', () => {
     mockGame.checkAnswer.mockReturnValueOnce(true)
   
     const result = sut.handleAnswer('A')
@@ -83,12 +107,24 @@ describe('QuizController', () => {
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('A')
   })
   
-  it('should return false for an incorrect answer', () => {
+  it('should return false for an incorrect answer in handleAnswer method', () => {
     mockGame.checkAnswer.mockReturnValueOnce(false)
   
     const result = sut.handleAnswer('B')
     expect(result).toBe(false)
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
+  })
+
+  it('should throw QuizControllerError with correct message when processing an answer fails in handleAnswer method', () => {
+    // Mock `checkAnswer` to throw an error.
+    mockGame.checkAnswer.mockImplementation(() => {
+      throw new Error('Answer processing error')
+    })
+
+    expect(() => sut.handleAnswer('A')).toThrow(QuizControllerError)
+    expect(() => sut.handleAnswer('A')).toThrow('Answer processing error')
+
+    expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
   it('should execute the wrapped function without errors using handleErrors template method', () => {

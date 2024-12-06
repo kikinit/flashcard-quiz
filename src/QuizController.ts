@@ -12,12 +12,16 @@ export class QuizController {
   }
 
   public start(): void {
-    this.ui.start()
+    this.handleErrors(() => {
+      this.ui.start()
+    })
   }
 
   public startGame(): void {
-    const nextQuestion = this.game.getNextQuestion()
-    this.ui.displayQuestion(nextQuestion)
+    this.handleErrors(() => {
+      const nextQuestion = this.game.getNextQuestion()
+      this.ui.displayQuestion(nextQuestion)
+    })
   }
 
   public showNextQuestion(): void {
@@ -28,16 +32,18 @@ export class QuizController {
   }
  
   public handleAnswer(input: string): boolean {
-    const isCorrect = this.game.checkAnswer(input)
-    return isCorrect
+    return this.handleErrors(() => {
+      const isCorrect = this.game.checkAnswer(input)
+      return isCorrect
+    })
   }
 
-  private handleErrors(fn: () => void): void {
+  private handleErrors<T>(fn: () => T): T {
     try {
-      fn()
+      return fn()
     } catch (error) {
       const message = error instanceof Error ? error.message : undefined
       throw new QuizControllerError(message)
     }
-  }
+  }  
 }
