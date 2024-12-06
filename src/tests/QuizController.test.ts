@@ -103,6 +103,28 @@ describe('QuizController', () => {
     expect(mockUI.displayError).not.toHaveBeenCalled()
   })
 
+  it('should display an error message when an unexpected error occurs in playGame method', () => {
+    // Mock `isGameOver` to ensure the loop runs once before terminating.
+    mockGame.isGameOver
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true)
+
+    // Mock `getUserInput` to throw an error during the loop.
+    mockUI.getUserInput.mockImplementation(() => {
+        throw new Error('Simulated error')
+    })
+
+    // Spy on `showNextQuestion` to ensure it is not called.
+    const showNextQuestionSpy = jest.spyOn(sut, 'showNextQuestion')
+
+    sut.playGame()
+
+    expect(mockUI.displayError).toHaveBeenCalledWith('An unexpected error occurred. Please try again.')
+    expect(mockGame.isGameOver).toHaveBeenCalledTimes(2)
+    expect(showNextQuestionSpy).not.toHaveBeenCalled()
+  })
+
+
 
   it('should display a goodbye message and stop the game when command is StartCommand.EXIT in handleStartCommand method', () => {
     const result = sut.handleStartCommand(StartCommand.EXIT)
