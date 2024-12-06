@@ -26,10 +26,14 @@ export class QuizController {
 
   public showNextQuestion(): void {
     this.handleErrors(() => {
-      const nextQuestion = this.game.getNextQuestion()
-      this.ui.displayQuestion(nextQuestion)
+      if (this.game.isGameOver()) {
+        this.endGame()
+      } else {
+        const nextQuestion = this.game.getNextQuestion()
+        this.ui.displayQuestion(nextQuestion)
+      }
     })
-  }
+  }  
  
   public handleAnswer(input: string): boolean {
     return this.handleErrors(() => {
