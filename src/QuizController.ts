@@ -1,5 +1,6 @@
 import { QuizGame } from './QuizGame'
 import { ConsoleUI } from './ConsoleUI'
+import { QuizControllerError } from './errors'
 
 export class QuizController {
   private game: QuizGame
@@ -27,5 +28,14 @@ export class QuizController {
   public handleAnswer(input: string): boolean {
     const isCorrect = this.game.checkAnswer(input)
     return isCorrect
+  }
+
+  private handleErrors(fn: () => void): void {
+    try {
+      fn()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : undefined
+      throw new QuizControllerError(message)
+    }
   }
 }
