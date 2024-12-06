@@ -24,19 +24,19 @@ export class ConsoleUI {
     this.output('Welcome to the Quiz Game!')
     this.output('Type "s" to start or "q" to quit.')
 
-    let command: StartCommand = StartCommand.UNKNOWN
-
-    this.input((userInput) => {
-      if (userInput === 's') {
-        command = StartCommand.START
-      } else if (userInput === 'q') {
-        this.output('Goodbye!')
-        command = StartCommand.EXIT
-      } else {
-        this.output('Unknown command. Type "s" to play or "q" to quit.')
-      }
+    let userInput = ''
+    this.input((input) => {
+        userInput = input.trim().toLowerCase()
     })
-    return command
+
+    switch (userInput) {
+        case 's':
+            return StartCommand.START
+        case 'q':
+            return StartCommand.EXIT
+        default:
+            return StartCommand.UNKNOWN
+    }
   }
 
   public displayQuestion(question: Question) {
