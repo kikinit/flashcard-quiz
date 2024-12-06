@@ -31,6 +31,9 @@ export class QuizController {
       case StartCommand.START:
         this.playGame()
         return true
+      case StartCommand.EXIT:
+        this.ui.displayMessage('Goodbye!')
+        return false
     }
     return false
   }
