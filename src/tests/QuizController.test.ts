@@ -80,6 +80,14 @@ describe('QuizController', () => {
     expect(showNextQuestionSpy).toHaveBeenCalled()
   })
 
+  it('should validate the answer when a numeric input is provided in handleUserAction method', () => {
+    const handleAnswerSpy = jest.spyOn(sut, 'handleAnswer')
+  
+    sut.handleUserAction('1')
+  
+    expect(handleAnswerSpy).toHaveBeenCalledWith('1')
+  })
+
   it('should display an error for unknown commands in handleUserAction method', () => {
   sut.handleUserAction('z')
 
