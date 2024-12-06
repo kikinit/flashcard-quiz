@@ -1,8 +1,8 @@
-import { Question } from './Question'
-import { QuestionBank } from './QuestionBank'
-import { Scoreboard } from './Scoreboard'
-import { GameState } from './GameState'
-import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from './errors'
+import { Question } from './Question.js'
+import { QuestionBank } from './QuestionBank.js'
+import { Scoreboard } from './Scoreboard.js'
+import { GameState } from './GameState.js'
+import { NoCurrentQuestionError, GameOverError, MaxHintsLimitError } from './errors/index.js'
 
 export class QuizGame {
   private readonly CORRECT_ANSWER_REWARD = 10

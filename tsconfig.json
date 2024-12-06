@@ -1,22 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES6",                // Compiles to ES6
+    "target": "ES6",                // Compiles to ES6 (compatible with modern environments)
     "module": "esnext",             // Use ESNext modules (import/export syntax)
     "moduleResolution": "node",     // Resolve modules as Node.js does
     "strict": true,                 // Enable strict type checking
-    "esModuleInterop": true,        // Allows interoperability between CommonJS and ES Modules
-    "skipLibCheck": true,           // Skips checking of declaration files (.d.ts)
-    "forceConsistentCasingInFileNames": true, // Ensures consistent casing in filenames
+    "esModuleInterop": true,        // Interoperability between CommonJS and ES Modules
+    "skipLibCheck": true,           // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in filenames
     "outDir": "./dist",             // Output directory for compiled files
-    "declaration": true             // Generate declaration files for TypeScript
+    "declaration": true,            // Generate .d.ts files for TypeScript definitions
+    "resolveJsonModule": true,      // Allow importing JSON modules
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules without default exports
+    "sourceMap": true               // Generate source maps for easier debugging
   },
   "include": [
-    "src/**/*.ts",                  // Include all TypeScript files in the src folder
+    "src/**/*.ts",                  // Include all TypeScript files in src folder
     "tests/**/*.ts",                // Include all TypeScript test files
-    "./src/types/express.d.ts"      // Custom TypeScript types
+    "./src/types/express.d.ts"      // Include custom TypeScript types
   ],
   "exclude": [
     "node_modules",                 // Exclude node_modules from compilation
-    "dist"                          // Exclude the dist folder (compiled output)
+    "dist"                          // Exclude dist folder
   ]
 }

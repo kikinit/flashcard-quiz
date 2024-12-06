@@ -1,8 +1,8 @@
-import { QuizGame } from './QuizGame'
-import { ConsoleUI } from './ConsoleUI'
-import { StartCommand } from './StartCommand'
-import { UserAction } from './UserAction'
-import { QuizControllerError } from './errors'
+import { QuizGame } from './QuizGame.js'
+import { ConsoleUI } from './ConsoleUI.js'
+import { StartCommand } from './StartCommand.js'
+import { UserAction } from './UserAction.js'
+import { QuizControllerError } from './errors/index.js'
 
 export class QuizController {
   private game: QuizGame

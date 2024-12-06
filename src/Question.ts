@@ -1,4 +1,4 @@
-import { InvalidAnswerError, NoMoreHintsError } from './errors'
+import { InvalidAnswerError, NoMoreHintsError } from './errors/index.js'
 
 export class Question {
   private hintsUsed: number = 0

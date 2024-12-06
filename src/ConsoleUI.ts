@@ -1,7 +1,7 @@
-import { Question } from './Question'
-import { StartCommand } from './StartCommand'
-import { UserAction } from './UserAction'
-import { ConsoleUIError } from './errors'
+import { Question } from './Question.js'
+import { StartCommand } from './StartCommand.js'
+import { UserAction } from './UserAction.js'
+import { ConsoleUIError } from './errors/index.js'
 
 export class ConsoleUI {
   private input: (callback: (input: string) => void) => void

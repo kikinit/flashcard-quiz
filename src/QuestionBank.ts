@@ -1,6 +1,6 @@
-import { Question } from './Question'
-import { QuestionFactory } from './QuestionFactory'
-import { DuplicateQuestionError, QuestionNotFoundError, NoMoreQuestionsError } from './errors'
+import { Question } from './Question.js'
+import { QuestionFactory } from './QuestionFactory.js'
+import { DuplicateQuestionError, QuestionNotFoundError, NoMoreQuestionsError } from './errors/index.js'
 
 export class QuestionBank {
   private questions: Question[] = []
