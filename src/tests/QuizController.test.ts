@@ -64,6 +64,14 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
+  it('should call requestHint when input is "h" in handleUserAction method', () => {
+    const requestHintSpy = jest.spyOn(sut, 'requestHint')
+  
+    sut.handleUserAction('h')
+  
+    expect(requestHintSpy).toHaveBeenCalled()
+  })
+
   it('should get the next question from the game and display it via the UI in StartGame method', () => {
     // Mock the question object.
     const mockQuestion = { text: 'Mock question' } as unknown as Question
