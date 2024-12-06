@@ -1,7 +1,7 @@
 import { QuizGame } from './QuizGame'
 import { ConsoleUI } from './ConsoleUI'
-import { QuizControllerError } from './errors'
 import { UserAction } from './UserAction'
+import { QuizControllerError } from './errors'
 
 export class QuizController {
   private game: QuizGame
@@ -18,7 +18,7 @@ export class QuizController {
     })
   }
 
-  public startGame(): void {
+  public playGame(): void {
     this.handleErrors(() => {
       const nextQuestion = this.game.getNextQuestion()
       this.ui.displayQuestion(nextQuestion)

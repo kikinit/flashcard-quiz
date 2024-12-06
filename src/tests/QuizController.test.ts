@@ -103,7 +103,7 @@ describe('QuizController', () => {
     mockGame.getNextQuestion.mockReturnValue(mockQuestion)
   
     // Call the method.
-    sut.startGame()
+    sut.playGame()
   
     // Verify interactions.
     expect(mockGame.getNextQuestion).toHaveBeenCalled()
@@ -116,8 +116,8 @@ describe('QuizController', () => {
       throw new Error('Game start error')
     })
 
-    expect(() => sut.startGame()).toThrow(QuizControllerError)
-    expect(() => sut.startGame()).toThrow('Game start error')
+    expect(() => sut.playGame()).toThrow(QuizControllerError)
+    expect(() => sut.playGame()).toThrow('Game start error')
 
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
