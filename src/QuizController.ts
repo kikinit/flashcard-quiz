@@ -26,12 +26,13 @@ export class QuizController {
     })
   }
 
-  public handleStartCommand(command: StartCommand): void {
+  public handleStartCommand(command: StartCommand): boolean {
     switch (command) {
       case StartCommand.START:
         this.playGame()
-        break
+        return true
     }
+    return false
   }
 
   public handleUserAction(action: UserAction, input?: string): void {

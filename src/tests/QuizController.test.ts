@@ -70,8 +70,9 @@ describe('QuizController', () => {
   it('should start the game when command is StartCommand.START in handleStartCommand method', () => {
     const playGameSpy = jest.spyOn(sut, 'playGame')
 
-    sut.handleStartCommand(StartCommand.START)
+    const result = sut.handleStartCommand(StartCommand.START)
 
+    expect(result).toBe(true)
     expect(playGameSpy).toHaveBeenCalled()
     expect(mockUI.displayMessage).not.toHaveBeenCalled()
     expect(mockUI.displayError).not.toHaveBeenCalled()
