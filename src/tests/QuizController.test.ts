@@ -7,6 +7,7 @@ import { QuizControllerError } from '../errors'
 describe('QuizController', () => {
   let mockGame: jest.Mocked<QuizGame>
   let mockUI: jest.Mocked<ConsoleUI>
+  let mockQuestion: jest.Mocked<Question>
   let sut: QuizController
 
   beforeEach(() => {
@@ -16,6 +17,7 @@ describe('QuizController', () => {
       getNextQuestion: jest.fn(),
       requestHint: jest.fn(),
       getScore: jest.fn(),
+      isGameOver: jest.fn(),
       restart: jest.fn()
     } as unknown as jest.Mocked<QuizGame>
 
@@ -28,6 +30,12 @@ describe('QuizController', () => {
       displayEndGame: jest.fn(),
       restartGame: jest.fn()
     } as unknown as jest.Mocked<ConsoleUI>
+
+    // Mock Question instance with necessary methods.
+    mockQuestion = { 
+      getText: jest.fn(),
+      getOptions: jest.fn()
+    } as unknown as jest.Mocked<Question>
 
     // Instantiate the controller.
     sut = new QuizController(mockGame, mockUI)
@@ -81,25 +89,45 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
-  it('should retrieve the next question and display it via the UI in showNextQuestion method', () => {
-    const mockQuestion = { getText: jest.fn(), getOptions: jest.fn() } as unknown as Question
+  it('should retrieve the next question and display it via the UI when the game is not over in showNextQuestion method', () => {
+
+    // Mock behavior
+    mockGame.isGameOver.mockReturnValue(false)
     mockGame.getNextQuestion.mockReturnValue(mockQuestion)
-  
+
     sut.showNextQuestion()
-  
+
+    expect(mockGame.isGameOver).toHaveBeenCalled()
     expect(mockGame.getNextQuestion).toHaveBeenCalled()
     expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
+    expect(mockUI.displayEndGame).not.toHaveBeenCalled()
   })
- 
-  it('should throw QuizControllerError with correct message when retrieving the next question fails', () => {
-    // Mock `getNextQuestion` to throw an error.
+
+  it('should invoke endGame when the game is over in showNextQuestion method', () => {
+    // Mock behavior.
+    mockGame.isGameOver.mockReturnValue(true)
+
+    sut.endGame = jest.fn()
+
+    sut.showNextQuestion()
+
+    expect(mockGame.isGameOver).toHaveBeenCalled()
+    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
+    expect(mockUI.displayQuestion).not.toHaveBeenCalled()
+    expect(sut.endGame).toHaveBeenCalled()
+  })
+
+  it('should handle errors when retrieving the next question and display them via the UI in showNextQuestion method', () => {
+    // Mock behavior
+    mockGame.isGameOver.mockReturnValue(false)
     mockGame.getNextQuestion.mockImplementation(() => {
-      throw new Error('Original game error')
+      throw new Error('Game question error')
     })
-  
+
     expect(() => sut.showNextQuestion()).toThrow(QuizControllerError)
-    expect(() => sut.showNextQuestion()).toThrow('Original game error')
-  
+    expect(() => sut.showNextQuestion()).toThrow('Game question error')
+
+    expect(mockUI.displayError).toHaveBeenCalledWith('Game question error')
     expect(mockUI.displayQuestion).not.toHaveBeenCalled()
   })
 
@@ -110,7 +138,7 @@ describe('QuizController', () => {
     expect(result).toBe(true)
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('A')
   })
-  
+
   it('should return false for an incorrect answer in handleAnswer method', () => {
     mockGame.checkAnswer.mockReturnValueOnce(false)
   
