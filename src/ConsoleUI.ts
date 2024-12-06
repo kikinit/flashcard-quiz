@@ -95,6 +95,12 @@ export class ConsoleUI {
     })
   }
 
+  public displayMessage(message: string): void {
+    this.handleErrors(() => {
+      this.output(message)
+    })
+  }
+
   public displayError(message: string): void {
     this.handleErrors(() => {
       this.output(message)
