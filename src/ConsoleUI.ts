@@ -64,6 +64,13 @@ export class ConsoleUI {
     })
   }
 
+  public displayEndGame(score: number): void {
+    this.handleErrors(() => {
+      this.output(`Game over! Your final score is ${score}.`)
+      this.output('Type "r" to restart or "q" to quit.')
+    })
+  }
+
   public restartGame(): void {
     this.handleErrors(() => {
       this.output('Game has been restarted. You can start again!')
