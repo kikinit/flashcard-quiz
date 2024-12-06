@@ -246,12 +246,22 @@ it('should display an error message and return StartCommand.UNKNOWN for invalid 
     expect(result).toBe(UserAction.NEXT_QUESTION)
   })
 
-  it('should return SUBMIT_ANSWER for numeric inputs "1", "2", "3" in getUserInput method', () => {
-    ['1', '2', '3'].forEach((input) => {
-      mockInput.mockImplementation((callback) => callback(input))
-      const result = sut.getUserInput()
-      expect(result).toBe(UserAction.SUBMIT_ANSWER)
-    })
+  it('should return SUBMIT_ANSWER for numeric input "1" in getUserInput method', () => {
+    inputValue = '1'
+    const result = sut.getUserInput()
+    expect(result).toBe(UserAction.SUBMIT_ANSWER_1)
+  })
+
+  it('should return SUBMIT_ANSWER for numeric input "2" in getUserInput method', () => {
+    inputValue = '2'
+    const result = sut.getUserInput()
+    expect(result).toBe(UserAction.SUBMIT_ANSWER_2)
+  })
+
+  it('should return SUBMIT_ANSWER for numeric input "3" in getUserInput method', () => {
+    inputValue = '3'
+    const result = sut.getUserInput()
+    expect(result).toBe(UserAction.SUBMIT_ANSWER_3)
   })
 
   it('should return UNKNOWN for invalid input in getUserInput method', () => {
