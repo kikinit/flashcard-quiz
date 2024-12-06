@@ -1,5 +1,6 @@
 import { QuizGame } from './QuizGame'
 import { ConsoleUI } from './ConsoleUI'
+import { StartCommand } from './StartCommand'
 import { UserAction } from './UserAction'
 import { QuizControllerError } from './errors'
 
@@ -23,6 +24,14 @@ export class QuizController {
       const nextQuestion = this.game.getNextQuestion()
       this.ui.displayQuestion(nextQuestion)
     })
+  }
+
+  public handleStartCommand(command: StartCommand): void {
+    switch (command) {
+      case StartCommand.START:
+        this.playGame()
+        break
+    }
   }
 
   public handleUserAction(action: UserAction, input?: string): void {
