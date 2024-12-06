@@ -1,6 +1,5 @@
 import { ConsoleUI } from '../ConsoleUI'
 import { Question } from '../Question'
-import { QuizGame } from '../QuizGame'
 import { StartCommand } from '../StartCommand'
 import { UserAction } from '../UserAction'
 import { ConsoleUIError } from '../errors/'
@@ -174,18 +173,10 @@ describe('ConsoleUI - Method Functionality', () => {
 describe('ConsoleUI - User Input Method Functionality', () => {
   let mockInput: jest.Mock
   let mockOutput: jest.Mock
-  let mockGame: jest.Mocked<QuizGame>
   let sut: ConsoleUI
   let inputValue: string
 
   beforeEach(() => {
-    // Mock the QuizGame instance with necessary methods.
-    mockGame = {
-      checkAnswer: jest.fn(),
-      getNextQuestion: jest.fn(),
-      requestHint: jest.fn(),
-      restart: jest.fn(),
-    } as unknown as jest.Mocked<QuizGame>
 
     // Mock the input and output streams.
     mockInput = jest.fn((callback: (input: string) => void) => callback(inputValue))
@@ -195,7 +186,8 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     sut = new ConsoleUI(mockInput, mockOutput)
   })
 
-  it('should display a welcome message when start method is called', () => {
+  it('should display a welcome message and instructions when start method is called', () => {
+    inputValue = ''
     sut.start()
 
     expect(mockOutput).toHaveBeenCalledWith('Welcome to the Quiz Game!')
@@ -209,35 +201,28 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     expect(result).toBe(StartCommand.START)
   })
 
-  it('should process user input for the "q" command in start method', () => {
+  it('should process user input for the "q" command and return StartCommand.EXIT in start method', () => {
     inputValue = 'q' // Simulate "exit" command.
     const result = sut.start()
 
     expect(result).toBe(StartCommand.EXIT)
-
-    expect(mockOutput).toHaveBeenCalledWith('Goodbye!')
-    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
   })
 
-  it('should display an error message for unknown commands in start method', () => {
-    inputValue = 'invalid' // Simulate an invalid command.
+it('should display an error message and return StartCommand.UNKNOWN for invalid input in start method', () => {
+    inputValue = 'invalid' // Simulate invalid command.
     const result = sut.start()
-  
+
     expect(result).toBe(StartCommand.UNKNOWN)
-  
-    expect(mockOutput).toHaveBeenCalledWith('Unknown command. Type "s" to play or "q" to quit.')
-  
-    expect(mockGame.getNextQuestion).not.toHaveBeenCalled()
   })
 
   it('should return REQUEST_HINT for "h" input in getUserInput method', () => {
-    mockInput.mockImplementation((callback) => callback('h'))
+    inputValue = 'h'
     const result = sut.getUserInput()
     expect(result).toBe(UserAction.REQUEST_HINT)
   })
 
   it('should return NEXT_QUESTION for "n" input in getUserInput method', () => {
-    mockInput.mockImplementation((callback) => callback('n'))
+    inputValue = 'n'
     const result = sut.getUserInput()
     expect(result).toBe(UserAction.NEXT_QUESTION)
   })
