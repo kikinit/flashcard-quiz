@@ -255,5 +255,14 @@ describe('ConsoleUI - User Input Method Functionality', () => {
     const result = sut.getUserInput()
     expect(result).toBe(UserAction.UNKNOWN)
   })
+
+  it('should handle errors and throw ConsoleUIError if input fails in getUserInput method', () => {
+    mockInput.mockImplementation(() => {
+      throw new Error('Input error')
+    })
+
+    expect(() => sut.getUserInput()).toThrow(ConsoleUIError)
+    expect(() => sut.getUserInput()).toThrow('Input error')
+  })
 })
 
