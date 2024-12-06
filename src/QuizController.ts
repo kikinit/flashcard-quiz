@@ -22,8 +22,12 @@ export class QuizController {
   public playGame(): void {
     this.handleErrors(() => {
       while (!this.game.isGameOver()) {
-        const action = this.ui.getUserInput()
-        this.handleUserAction(action)
+        try {
+          const action = this.ui.getUserInput()
+          this.handleUserAction(action)
+        } catch {
+          this.ui.displayError('An unexpected error occurred. Please try again.')
+        }
       }
       this.endGame()
     })
