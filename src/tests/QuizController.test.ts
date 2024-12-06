@@ -20,7 +20,7 @@ describe('QuizController', () => {
     // Mock ConsoleUI instance with necessary methods.
     mockUI = {
       start: jest.fn(),
-      displayQuestion: jest.fn()
+      displayQuestion: jest.fn(),
     } as unknown as jest.Mocked<ConsoleUI>
 
     // Instantiate the controller.
@@ -51,6 +51,16 @@ describe('QuizController', () => {
     expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
   })
 
+  it('should retrieve the next question and display it via the UI in showNextQuestion method', () => {
+    const mockQuestion = { getText: jest.fn(), getOptions: jest.fn() } as unknown as Question
+    mockGame.getNextQuestion.mockReturnValue(mockQuestion)
+  
+    sut.showNextQuestion()
+  
+    expect(mockGame.getNextQuestion).toHaveBeenCalled()
+    expect(mockUI.displayQuestion).toHaveBeenCalledWith(mockQuestion)
+  })
+ 
   it('should return true for a correct answer', () => {
     mockGame.checkAnswer.mockReturnValueOnce(true)
   
@@ -65,5 +75,5 @@ describe('QuizController', () => {
     const result = sut.handleAnswer('B')
     expect(result).toBe(false)
     expect(mockGame.checkAnswer).toHaveBeenCalledWith('B')
-  })  
+  })
 })
