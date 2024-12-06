@@ -136,22 +136,11 @@ describe('ConsoleUI - Method Functionality', () => {
     expect(() => sut.displayHint('This is a hint')).toThrow(ConsoleUIError)
   })
 
-  it('should wrap errors in a ConsoleUIError using handleErrors template method', () => {
-    const mockFn = jest.fn(() => {
-      throw new Error('Original error message')
-    })
-
-    expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
-    expect(() => sut['handleErrors'](mockFn)).toThrow('Original error message')
-  })
-
-  it('should handle unknown errors gracefully using handleErrors template method', () => {
-    const mockFn = jest.fn(() => {
-      throw 'Unknown error'
-    })
-
-    expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
-    expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred')
+  it('should display the final score and prompt for restart or quit in displayEndGame method', () => {
+    sut.displayEndGame(42)
+  
+    expect(mockOutput).toHaveBeenCalledWith('Game over! Your final score is 42.')
+    expect(mockOutput).toHaveBeenCalledWith('Type "r" to restart or "q" to quit.')
   })
 
   it('restarts the game and displays a confirmation message in restartGame method', () => {
@@ -174,7 +163,27 @@ describe('ConsoleUI - Method Functionality', () => {
     sut.displayError(errorMessage)
   
     expect(mockOutput).toHaveBeenCalledWith(errorMessage)
-  })  
+  })
+
+  // TESTS FOR GLOBAL ÈRROR HANDLING IN TEMPLATE METHOD
+
+  it('should wrap errors in a ConsoleUIError using handleErrors template method', () => {
+    const mockFn = jest.fn(() => {
+      throw new Error('Original error message')
+    })
+
+    expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
+    expect(() => sut['handleErrors'](mockFn)).toThrow('Original error message')
+  })
+
+  it('should handle unknown errors gracefully using handleErrors template method', () => {
+    const mockFn = jest.fn(() => {
+      throw 'Unknown error'
+    })
+
+    expect(() => sut['handleErrors'](mockFn)).toThrow(ConsoleUIError)
+    expect(() => sut['handleErrors'](mockFn)).toThrow('[ConsoleUIError] An unknown error occurred')
+  })
 })
 
 describe('ConsoleUI - User Input Method Functionality', () => {
