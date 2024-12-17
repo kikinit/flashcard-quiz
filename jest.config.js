@@ -1,18 +1,12 @@
 export default {
-  preset: 'ts-jest', // Use ts-jest for TypeScript transformation
-  testEnvironment: 'node', // Set the Node.js test environment
+  preset: 'ts-jest', // Use ts-jest preset for TypeScript files
+  testEnvironment: 'node', // Node.js test environment
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', { useESM: true }], // Enable ESM with ts-jest for .ts/.tsx files
+    '^.+\\.tsx?$': ['ts-jest', { useESM: true }], // Move ts-jest config here
   },
   extensionsToTreatAsEsm: ['.ts'], // Treat .ts files as ES modules
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'], // Recognize these extensions in imports
-  testMatch: ['**/tests/**/*.test.ts'], // Locate test files in the `tests` folder
+  testMatch: ['**/tests/**/*.test.ts'], // Locate test files
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1', // Allow resolving .js extensions correctly in imports
-  },
-  globals: {
-    'ts-jest': {
-      useESM: true, // Ensure ts-jest transforms modules as ES modules
-    },
+    '^(\\.{1,2}/.*)\\.js$': '$1', // Support for .js extensions in imports
   },
 }
